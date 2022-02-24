@@ -1,68 +1,49 @@
 #include <iostream>
-#include <vector>
+#include <string.h>
+#include <cmath>
 
-using namespace std;
-int main() {
-    vector<int> gem;
-    vector<int> frisca;
-    int raza, latura, lungime, inaltime, arie, volum;
-    gem.push_back(0);
-    frisca.push_back(0);
-    char comanda[21];
-    char forma[21];
-    forma[0] = 'a';
-    comanda[0]='a';
 
-    while(comanda[0]!='S')
-    {
-        cin.getline(comanda, 20);
 
-        if(comanda[0=='A'])
-        {//operatia de ADD
-            cin.getline(forma, 20);
-            if(forma[0]=='c')
-            {//cerc
-                cout<<"raza cercului:"<<endl;
-                cin>>raza;
-                cout<<"inaltime:"<<endl;
-                cin>>inaltime;
-                arie = raza*raza*3;
-                volum = arie*inaltime;
-                gem.push_back(volum*2);
-                frisca.push_back(2*3*raza*inaltime);
+class numar_complex{
+private:
+    double parte_reala;
+    double parte_imaginara;
 
-            }
-            if(forma[0]=='d')
-            {   cout<<"lungimea dreptunghiului este:"<<endl;
-                cin>>lungime;
-                cout<<"latimea dreptunghiului este:"<<endl;
-                cin>>latura;
-                cout<<"inaltime:"<<endl;
-                cin>>inaltime;
+public:
+    double get_parte_reala() const {
+        return parte_reala;
+    }
 
-                //dreptunghi
-            }
-            if(forma[0]=='p')
-            {
-                //patrat
-            }
-            if(forma[0]=='t')
-            {
-                //triunghi
-            }
-        }
+    void set_parte_reala(double parte_reala_) {
+        numar_complex::parte_reala = parte_reala_;
+    }
 
-        if(comanda[0]=='R')
-        {//operatia de REMOVE
+    double get_parte_imaginara() const {
+        return parte_imaginara;
+    }
 
-        }
+    void set_parte_imaginara(double parte_imaginara_) {
+        numar_complex::parte_imaginara = parte_imaginara_ ;
+    }
 
-        if(comanda[0]=='T')
-        {//operatia de TOTAL
 
-        }
+public:
+    numar_complex(int parte_reala_, int parte_imaginara_){
+        parte_reala = parte_reala_;
+        parte_imaginara = parte_imaginara_;
+    }
+    ~numar_complex(){}
+
+    void afisare(numar_complex nr){
+        std::cout<<nr.parte_reala<<"+*"<<nr.parte_imaginara<<std::endl;
+
+    }
+    void afisare_modul (numar_complex nr){
+        std::cout<<sqrt(nr.parte_reala*nr.parte_reala+nr.parte_imaginara*nr.parte_imaginara)<<std::endl;
+
+    }
+    numar_complex operator+ (numar_complex nr1, numar_complex nr2){
 
     }
 
-    return 0;
-}
+};
