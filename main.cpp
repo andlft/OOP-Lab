@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -99,7 +100,7 @@ public:
         cout<<"----------------------------------"<<endl;
     }
 
-    void operator=(Matrice matrix_)//operator public de atribuire
+    void operator=(Matrice const &matrix_)//operator public de atribuire
             {
 
         for(int i = 0; i < nr_linii; i++)
@@ -172,7 +173,7 @@ public:
 
     }
 
-    friend Matrice operator+ (Matrice mat1, Matrice mat2)//operator friend +
+    friend Matrice operator+ (Matrice const &mat1, Matrice const &mat2)//operator friend +
     {
         if ((mat1.nr_linii == mat2.nr_linii)&&(mat1.nr_coloane == mat2.nr_coloane))
         {   Matrice mat_ret(mat2.nr_linii, mat2.nr_coloane);
@@ -192,7 +193,7 @@ public:
 
     }
 
-    friend Matrice operator- (Matrice mat1, Matrice mat2)//operator friend -
+    friend Matrice operator- (Matrice const &mat1, Matrice const &mat2)//operator friend -
     {
         if ((mat2.nr_linii == mat1.nr_linii)&&(mat2.nr_coloane == mat1.nr_coloane))
         {   Matrice mat_ret(mat1.nr_linii, mat1.nr_coloane);
@@ -212,7 +213,7 @@ public:
 
     }
 
-    friend Matrice operator* (Matrice mat1, Matrice mat2)//operator friend * pt inmultiri de matrice
+    friend Matrice operator* (Matrice const &mat1, Matrice const &mat2)//operator friend * pt inmultiri de matrice
     {
         if (mat1.nr_coloane == mat2.nr_linii)
         {   Matrice mat_ret (mat2.nr_coloane, mat1.nr_linii);
@@ -234,7 +235,7 @@ public:
                 return mat_ret;
     }
 
-    friend Matrice operator* (Matrice mat1, int x)//operator friend * pt inmultirea unei matrici cu o const
+    friend Matrice operator* (Matrice const &mat1, int x)//operator friend * pt inmultirea unei matrici cu o const
     {
         for(int i = 0; i < mat1.nr_linii; i++)
             for(int j = 0; j < mat1.nr_coloane; j++)
@@ -242,32 +243,43 @@ public:
                 return mat1;
     }
 
-    friend Matrice operator* (int x, Matrice mat1)//operator friend * pt inmultirea unei matrici cu o const
+    friend Matrice operator* (int x, Matrice const &mat1)//operator friend * pt inmultirea unei matrici cu o const
     {       for(int i = 0; i < mat1.nr_linii; i++)
             for(int j = 0; j < mat1.nr_coloane; j++)
             mat1.matrix[i][j] *= x;
             return mat1;
     }
 
-    friend int afis_linii (Matrice mat)//functie friend pt afisarea numarului de linii
+    friend int afis_linii (Matrice const &mat)//functie friend pt afisarea numarului de linii
     {
         return mat.nr_linii;
     }
 
-    friend int afis_coloane (Matrice mat)//functie friend pt afisarea numarului de coloane
+    void set_linii(int n)
+    {
+        nr_linii=n;
+    }
+
+    friend int afis_coloane (Matrice const &mat)//functie friend pt afisarea numarului de coloane
     {
         return mat.nr_coloane;
     }
-    friend int afis_elemente (Matrice mat)//functie friend pt afisarea numarului de elemente
+
+    void set_coloane(int n)
+    {
+        nr_coloane = n;
+    }
+
+    friend int afis_elemente (Matrice const &mat)//functie friend pt afisarea numarului de elemente
     {
         return mat.nr_coloane*mat.nr_linii;
     }
 
-    friend Matrice rez_ecuatie(Matrice mat1, Matrice mat2)//functie pt rezolvarea tipului de ecuatie propus
+    friend Matrice rez_ecuatie(Matrice const &mat1, Matrice const &mat2)//functie pt rezolvarea tipului de ecuatie propus
     {
         if(mat1.nr_linii == mat2.nr_coloane){
             double elem;
-            elem = mat2.matrix[0][0] / mat1.nr_coloane / mat1. matrix[0][0];
+            elem = -(mat2.matrix[0][0]) / mat1.nr_coloane / mat1. matrix[0][0];
             Matrice mat_ret(elem,mat1.nr_coloane, mat2.nr_linii);
             return mat_ret;
         }
@@ -276,53 +288,121 @@ public:
                     Matrice mat_ret(0,0,0);
                     return mat_ret;
         }
-
-
     }
+
+    
 };
 
 
 int main(){
-/*
-Matrice matrix(5.2, 3, 10);
-Matrice matrix2 = matrix;
-matrix.~Matrice();
-Matrice matrix3(5, 2);
-matrix3.afisare_matrice();
-matrix3.citire_matrice();
-matrix3.afisare_matrice();
-*/
-Matrice matrix3(5, 10, 20);
-Matrice matrix2(10, 4, 3);
-cin >> matrix3;
-matrix2.afisare_matrice();
-matrix3.afisare_matrice();
-//cout << matrix3;
-matrix2 = matrix3;
-matrix2.afisare_matrice();
-matrix3.afisare_matrice();
-//matrix3.actualizare(3.5, 2, 3);
-//matrix3.afisare_matrice();
-Matrice matrix4(0,0);
-matrix4 = matrix2+matrix3;
-matrix4.afisare_matrice();
-matrix4 = matrix4-matrix2;
-matrix4.afisare_matrice();
-matrix2.actualizare(2,3,3);
-matrix3.actualizare(5,3,10);
-matrix4 = matrix2*matrix3;
-matrix4.afisare_matrice();
-cout<<afis_linii(matrix4)<<endl;
-cout<<afis_coloane(matrix4)<<endl;
-cout<<afis_elemente(matrix4)<<endl;
-matrix4 = matrix4 * 4 * 10;
-matrix4.afisare_matrice();
-Matrice matrix5(2,2,3);
-Matrice matrix6(30,1,2);
-Matrice matrix7(0, 0, 0);
-matrix7 = rez_ecuatie(matrix5, matrix6);
-matrix7.afisare_matrice();
+    vector <Matrice> v_matrici;
+    int optiune=0;
+    do {cout<<"Scrie numarul a ceea ce doresti sa faci:\n 1. Adauga o matrice in vector\n2.Sterge o matrice din vectorul de matrici\n"
+              "3.Afiseaza toate matricele din vector\n 4.Adunare intre 2 matrice din vector\n 5.Scadere intre 2 matrice din vector\n"
+              "6.Inmultire intre 2 matrice\n 7.Inmultire intre o matrice si o constanta\n 8.Aflarea lui X din ecuatia cu matrici: AX + B = 0 \n"
+              "9.Reactualizarea unei matrici deja existente\n"
+              "0.Inchidere program\n";
+        cin>>optiune;
+        if(optiune == 1)
+        {   int elem, linii, coloane;
+            cout<<"Introdu elementul de pe componentele matricei"<<endl;
+            cin>>elem;
+            cout<<"Introdu numarul de linii al matricei"<<endl;
+            cin>>linii;
+            cout<<"Introdu numarul de coloane al matricei"<<endl;
+            cin>>coloane;
+
+            Matrice mat(elem, linii, coloane);
+            v_matrici.push_back(mat);
+        }
+
+        if(optiune == 2)
+        {
+            int poz;
+            cout<<"Introdu pozitia matricei pe care vrei sa o elimini (incepe cu 1):"<<endl;
+            cin>>poz;
+            v_matrici.erase(v_matrici.begin()+poz-1);
+        }
+        if(optiune == 3)
+        {
+            for (unsigned int i = 0; i < v_matrici.size(); i++)
+            {
+                cout<<"Matricea de pe pozitia "<<i+1<<" este:"<<endl;
+                v_matrici[i].Matrice::afisare_matrice();
+            }
+
+        }
+
+        if(optiune == 4)
+        {
+            int poz1, poz2;
+            cout<<"Introdu pozitia primei matrice:"<<endl;
+            cin>>poz1;
+            cout<<"Introdu pozitia celei dea doua matrice:"<<endl;
+            cin>>poz2;
+            cout<<"Rezultatul este:"<<endl;
+            (v_matrici[poz1-1]+v_matrici[poz2-1]).Matrice::afisare_matrice();
+        }
+
+        if(optiune == 5)
+        {
+            int poz1, poz2;
+            cout<<"Introdu pozitia primei matrice:"<<endl;
+            cin>>poz1;
+            cout<<"Introdu pozitia celei dea doua matrice:"<<endl;
+            cin>>poz2;
+            cout<<"Rezultatul este:"<<endl;
+            (v_matrici[poz1-1]-v_matrici[poz2-1]).Matrice::afisare_matrice();
+        }
+
+        if(optiune == 6)
+        {
+            int poz1, poz2;
+            cout<<"Introdu pozitia primei matrice:"<<endl;
+            cin>>poz1;
+            cout<<"Introdu pozitia celei dea doua matrice:"<<endl;
+            cin>>poz2;
+            cout<<"Rezultatul este:"<<endl;
+            (v_matrici[poz1-1]*v_matrici[poz2-1]).Matrice::afisare_matrice();
+        }
+
+        if(optiune == 7)
+        {
+            int poz1, poz2;
+            cout<<"Introdu pozitia matricei:"<<endl;
+            cin>>poz1;
+            cout<<"Introdu constanta:"<<endl;
+            cin>>poz2;
+            cout<<"Rezultatul este:"<<endl;
+            (v_matrici[poz1-1]*poz2).Matrice::afisare_matrice();
+        }
+
+        if(optiune == 8)
+        {
+            int poz1, poz2;
+            cout<<"Introdu pozitia primei matrice:"<<endl;
+            cin>>poz1;
+            cout<<"Introdu pozitia celei dea doua matrice:"<<endl;
+            cin>>poz2;
+            cout<<"Rezultatul este:"<<endl;
+            (rez_ecuatie(v_matrici[poz1-1],v_matrici[poz2-1])).Matrice::afisare_matrice();
+        }
+
+        if(optiune == 9)
+        {
+            int poz1, elem, linii, coloane;
+            cout<<"Introdu pozitia matricei pe care vrei sa o actualizezi:"<<endl;
+            cin>>poz1;
+            cout<<"Introdu elementul de pe componentele matricei:"<<endl;
+            cin>>elem;
+            cout<<"Introdu numarul de linii al matricei:"<<endl;
+            cin>>linii;
+            cout<<"Introdu numarul de coloane al matricei:"<<endl;
+            cin>>coloane;
+            v_matrici[poz1-1].actualizare(elem,linii,coloane);
+        }
 
 
+    }while(optiune!=0);
 
 }
