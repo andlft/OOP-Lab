@@ -297,14 +297,15 @@ public:
 int main(){
     vector <Matrice> v_matrici;
     int optiune=0;
-    do {cout<<"Scrie numarul a ceea ce doresti sa faci:\n 1. Adauga o matrice in vector\n2.Sterge o matrice din vectorul de matrici\n"
+    do {cout<<"Scrie numarul a ceea ce doresti sa faci:\n 1. Adauga o matrice in vector\n2.Sterge o matrice din vectorul de matrice\n"
               "3.Afiseaza toate matricele din vector\n 4.Adunare intre 2 matrice din vector\n 5.Scadere intre 2 matrice din vector\n"
               "6.Inmultire intre 2 matrice\n 7.Inmultire intre o matrice si o constanta\n 8.Aflarea lui X din ecuatia cu matrici: AX + B = 0 \n"
               "9.Reactualizarea unei matrici deja existente\n"
               "0.Inchidere program\n";
         cin>>optiune;
         if(optiune == 1)
-        {   int elem, linii, coloane;
+        {   int linii, coloane;
+            double elem;
             cout<<"Introdu elementul de pe componentele matricei"<<endl;
             cin>>elem;
             cout<<"Introdu numarul de linii al matricei"<<endl;
@@ -390,7 +391,8 @@ int main(){
 
         if(optiune == 9)
         {
-            int poz1, elem, linii, coloane;
+            int poz1, linii, coloane;
+            double elem;
             cout<<"Introdu pozitia matricei pe care vrei sa o actualizezi:"<<endl;
             cin>>poz1;
             cout<<"Introdu elementul de pe componentele matricei:"<<endl;
