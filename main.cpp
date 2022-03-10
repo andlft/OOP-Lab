@@ -100,7 +100,7 @@ public:
         cout<<"----------------------------------"<<endl;
     }
 
-    void operator=(Matrice const &matrix_)//operator public de atribuire
+    Matrice operator=(Matrice const &matrix_)//operator public de atribuire
             {
 
         for(int i = 0; i < nr_linii; i++)
@@ -123,6 +123,23 @@ public:
             for(int j = 0; j < nr_coloane; j++)
                 matrix[i][j] = matrix_.matrix[i][j];
 
+        return matrix_;
+
+    }
+
+    bool operator==(Matrice const &matrix_)//supraincarcarea operatorlui ==
+    {
+        if (nr_linii==matrix_.nr_linii)
+            if (nr_coloane==matrix_.nr_coloane)
+                {for(int i=0; nr_linii<i ;i++) {
+                        for (int j = 0; nr_coloane < j; j++) {
+                            if (matrix[i][j] != matrix_.matrix[i][j])
+                                return false;
+                        }
+                    }
+                    return true;
+                }
+        return false;
     }
 
 
@@ -144,6 +161,7 @@ public:
                 o<<matrix_.matrix[i][j]<<" ";
             cout<<endl;
             }
+        cout<<"----------------------------------"<<endl;
         return o;
     }
 
@@ -254,8 +272,12 @@ public:
     {
         return mat.nr_linii;
     }
+    int get_linii(Matrice const &mat) //getter pentru nr linii
+    {
+        return mat.nr_linii;
+    }
 
-    void set_linii(int n)
+    void set_linii(int n) //setter pentru numar linii
     {
         nr_linii=n;
     }
@@ -264,8 +286,12 @@ public:
     {
         return mat.nr_coloane;
     }
+    int get_coloane(Matrice const &mat) //getter pentru nr coloane
+    {
+     return mat.nr_coloane;
+    }
 
-    void set_coloane(int n)
+    void set_coloane(int n)  //setter pentru nr coloane
     {
         nr_coloane = n;
     }
@@ -279,7 +305,7 @@ public:
     {
         if(mat1.nr_linii == mat2.nr_coloane){
             double elem;
-            elem = -(mat2.matrix[0][0]) / mat1.nr_coloane / mat1. matrix[0][0];
+            elem = mat2.matrix[0][0] / mat1.nr_coloane / mat1. matrix[0][0];
             Matrice mat_ret(elem,mat1.nr_coloane, mat2.nr_linii);
             return mat_ret;
         }
@@ -290,16 +316,16 @@ public:
         }
     }
 
-    
+
 };
 
 
 int main(){
     vector <Matrice> v_matrici;
     int optiune=0;
-    do {cout<<"Scrie numarul a ceea ce doresti sa faci:\n 1. Adauga o matrice in vector\n2.Sterge o matrice din vectorul de matrice\n"
-              "3.Afiseaza toate matricele din vector\n 4.Adunare intre 2 matrice din vector\n 5.Scadere intre 2 matrice din vector\n"
-              "6.Inmultire intre 2 matrice\n 7.Inmultire intre o matrice si o constanta\n 8.Aflarea lui X din ecuatia cu matrici: AX + B = 0 \n"
+    do {cout<<"Scrie numarul a ceea ce doresti sa faci:\n1.Adauga o matrice in vector\n2.Sterge o matrice din vectorul de matrice\n"
+              "3.Afiseaza toate matricele din vector\n4.Adunare intre 2 matrice din vector\n5.Scadere intre 2 matrice din vector\n"
+              "6.Inmultire intre 2 matrice\n7.Inmultire intre o matrice si o constanta\n8.Aflarea lui X din ecuatia cu matrici: AX + B = 0 \n"
               "9.Reactualizarea unei matrici deja existente\n"
               "0.Inchidere program\n";
         cin>>optiune;
@@ -329,7 +355,7 @@ int main(){
             for (unsigned int i = 0; i < v_matrici.size(); i++)
             {
                 cout<<"Matricea de pe pozitia "<<i+1<<" este:"<<endl;
-                v_matrici[i].Matrice::afisare_matrice();
+                cout << v_matrici[i];
             }
 
         }
