@@ -1,53 +1,338 @@
+#include<iostream>
 
-#include <iostream>
-using namespace std;
-
-class Car{
-    int speed;
+class Punct{
+private:
+    float *x = new float;
+    float *y = new float;
 public:
-    Car(int speed_){
-        speed = speed_;
+    Punct(){   //constructor de initalizare fara parametrii
+
+    }
+    Punct(float x_, float y_){    // constructor de initializare parametrizat
+        *x = x_;
+        *y = y_;
     }
 
-    int getSpeed() const{
-        cout<<speed<<endl;
-        return speed ;
+    Punct(const Punct &pct){     // constructor de copiere
+        *x = *pct.x;
+        *y = *pct.y;
+    }
+    virtual ~Punct(){     //destructor
+        delete x;
+        delete y;
+    }
+
+    Punct operator= (const Punct &pct){
+        *x = *pct.x;
+        *y = *pct.y;
+        return *this;
+    }
+
+    friend std::ostream& operator<< (std::ostream& o, const Punct &pct){
+        o<<*pct.x<<" "<<*pct.y;
+        return o;
+    }
+
+    friend std::istream& operator>> (std::istream& i, Punct &pct){
+        i>>*pct.x >>*pct.y;
+        return i;
+    }
+
+    void actualizare(const float& x_, const float& y_){
+        *x = x_;
+        *y = y_;
+    }
+
+    float *getX() const {
+        return x;
+    }
+
+    void setX(float *x_) {
+        Punct::x = x_;
+    }
+
+    float *getY() const {
+        return y;
+    }
+
+    void setY(float *y_) {
+        Punct::y = y_;
     }
 };
 
-class Dacia : public Car{
+class Patrat{
+protected:
+    Punct *pct_st_jos = new Punct;
+    float *latura = new float;
 public:
-    Dacia(int speed_):Car(speed_){}
+    Patrat(){  // constructor fara parametrii
+
+    }
+    Patrat(const float& x, const float& y,const float& latura_){  //constructor cu parametrii
+        pct_st_jos->actualizare(x,y);
+        *latura = latura_;
+    }
+
+    Patrat(const Patrat &patrat){ //constructor de copiere
+        *pct_st_jos = *patrat.pct_st_jos;
+        *latura = *patrat.latura;
+    }
+    virtual ~Patrat(){  //destructor
+        delete pct_st_jos;
+        delete latura;
+    }
+
+    Patrat operator= (const Patrat& patrat_){
+        *pct_st_jos = *patrat_.pct_st_jos;
+        *latura = *patrat_.latura;
+        return *this;
+    }
+
+    friend std::ostream& operator<< (std::ostream& o, const Patrat &patrat_){
+        o<<*patrat_.pct_st_jos<<" "<<*patrat_.latura;
+        return o;
+    }
+
+    friend std::istream& operator>> (std::istream& i, Patrat &patrat_){
+        i>>*patrat_.pct_st_jos >>*patrat_.latura;
+        return i;
+    }
+
+    Punct *getPctStJos() const {
+        return pct_st_jos;
+    }
+
+    void setPctStJos(Punct *pctStJos) {
+        pct_st_jos = pctStJos;
+    }
+
+    float *getLatura() const {
+        return latura;
+    }
+
+    void setLatura(float *latura_) {
+        Patrat::latura = latura_;
+    }
+
+    bool operator==(const Patrat &rhs) const {
+        return pct_st_jos == rhs.pct_st_jos &&
+               latura == rhs.latura;
+    }
+
+    bool operator!=(const Patrat &rhs) const {
+        return !(rhs == *this);
+    }
 };
 
-class Toyota : public Car{
+class Dreptunghi : virtual public Patrat{
+protected:
+    float *latura2 =  new float;
 public:
-    Toyota(int speed_):Car(speed_){}
+    Dreptunghi(){ //constructor fara parametrii
+
+    }
+
+    Dreptunghi(const float &x, const float &y, const float &latura,const float latura2_) :
+    Patrat(x, y, latura) {
+        *latura2 = latura2_;
+    }
+         //constructor de initializare cu parametrii
+
+
+    Dreptunghi(const Dreptunghi & dreptunghi_):Patrat(*dreptunghi_.pct_st_jos->getX(),
+                                                      *dreptunghi_.pct_st_jos->getY(),
+                                                      *dreptunghi_.latura)
+                                                      { //constructor de copiere
+        *latura2 = *dreptunghi_.latura2;
+    }
+
+    float *getLatura2() const {  //getter
+        return latura2;
+    }
+
+    void setLatura2(float *latura2_) { //setter
+        Dreptunghi::latura2 = latura2_;
+    }
+
+    virtual ~Dreptunghi() {   //destructor
+        delete latura2;
+    }
+    Dreptunghi operator = (const Dreptunghi &drptg){
+        *pct_st_jos = *drptg.pct_st_jos;
+        *latura = *drptg.latura;
+        *latura2 = *drptg.latura2;
+        return *this;
+    }
+
+    bool operator==(const Dreptunghi &rhs) const {   //operator ==
+        return static_cast<const Patrat &>(*this) == static_cast<const Patrat &>(rhs) &&
+               latura2 == rhs.latura2;
+    }
+
+    bool operator!=(const Dreptunghi &rhs) const {  //operator !=
+        return !(rhs == *this);
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const Dreptunghi &dreptunghi) {
+        os << static_cast<const Patrat &>(dreptunghi) <<  dreptunghi.latura2;
+        return os;
+    }
+
+    friend std::istream &operator>>(std::istream &is, const Dreptunghi &dreptunghi){
+        is >> *dreptunghi.pct_st_jos>>*dreptunghi.latura >> *dreptunghi.latura2;
+        return is;
+    }
 };
 
-class Renault : public Car{
+class Romb : virtual public Patrat{
+protected:
+    Punct *pct_colt_op = new Punct;
 public:
-    Renault(int speed_):Car(speed_){}
+    Romb(){}//consturctor fara parametrii
+
+    Romb(const float &x, const float &y, const float &latura, const float &z, const float&w) :
+    Patrat(x, y, latura)  {
+        pct_colt_op->actualizare(z,w);
+    }
+    //constructor cu parametrii
+
+    Romb(const Romb &romb):Patrat(*romb.pct_st_jos->getX(), *romb.pct_st_jos->getY(), *romb.latura){
+        *pct_colt_op = *romb.pct_colt_op;
+    }
+
+
+    Punct getPctColtOp() const {
+        return *pct_colt_op;
+    }
+
+    void setPctColtOp(float x, float y) {
+        pct_colt_op->setX(&x);
+        pct_colt_op->setY(&y);
+
+    }
+
+    virtual ~Romb() {
+        delete pct_colt_op;
+    }
+
+    bool operator==(const Romb &rhs) const {
+        return static_cast<const Patrat &>(*this) == static_cast<const Patrat &>(rhs) &&
+               pct_colt_op == rhs.pct_colt_op;
+    }
+
+    bool operator!=(const Romb &rhs) const {
+        return !(rhs == *this);
+    }
+
+    Romb operator= (const Romb &rmb){
+        *pct_st_jos = *rmb.pct_st_jos;
+        *pct_colt_op = *rmb.pct_colt_op;
+        *latura = *rmb.latura;
+        return *this;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const Romb &romb) {
+        os << static_cast<const Patrat &>(romb) << romb.pct_colt_op;
+        return os;
+    }
+    friend std::istream &operator>>(std::istream &is, const Romb &romb) {
+        is >> *romb.pct_st_jos >> *romb.latura >> *romb.pct_colt_op;
+        return is;
+    }
 };
 
-class Circuit{
-    Car ** masina;
+class Paralelogram : public Dreptunghi, public Romb{
+public:
+    Paralelogram() {}
+
+            Paralelogram(
+
+    const float &x,
+    const float &y,
+    const float &latura,
+    const float &latura2,
+    const float &x2,
+    const float &y2
+    ):
+    Dreptunghi(x, y, latura, latura2
+    ),
+    Romb(x, y, latura, x2, y2
+    ){}
+
+    Paralelogram(const Paralelogram &prlgrm): Patrat(*prlgrm.pct_st_jos->getX(),
+                                                     *prlgrm.pct_st_jos->getY(),
+                                                     *prlgrm.latura),
+                                                        Dreptunghi(*prlgrm.pct_st_jos->getX(),
+                                                         *prlgrm.pct_st_jos->getY(),
+                                                         *prlgrm.latura,
+                                                         *prlgrm.latura2),
+                                                         Romb(*prlgrm.pct_st_jos->getX(),
+                                                              *prlgrm.pct_st_jos->getY(),
+                                                              *prlgrm.latura,
+                                                              *prlgrm.pct_colt_op->getX(),
+                                                              *prlgrm.pct_colt_op->getY()
+                                                         ){};
 
 
+    virtual ~Paralelogram() {
+
+    }
+    Paralelogram operator= (const Paralelogram &prlgrm){
+        *pct_st_jos = *prlgrm.pct_st_jos;
+        *latura=*prlgrm.latura;
+        *latura2=*prlgrm.latura2;
+        *pct_colt_op = *prlgrm.pct_colt_op;
+        return *this;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const Paralelogram &paralelogram) {
+        os << static_cast<const Dreptunghi &>(paralelogram) <<static_cast<const Romb &>(paralelogram);
+        return os;
+    }
+
+    friend std::istream &operator>>(std::istream &is, const Paralelogram &paralelogram){
+        is >> *paralelogram.pct_st_jos
+        >>*paralelogram.latura
+        >>*paralelogram.latura2
+        >>*paralelogram.pct_colt_op;
+        return is;
+    }
 
 };
 
-int main()
-{
-    Dacia masina(50);
-    Toyota masina2(40);
-    Renault masina3 (60);
-    masina.getSpeed();
-    masina2.getSpeed();
-    masina3.getSpeed();
+//class Trapez : public Paralelogram{
 
-    return 0;
-
-};
+//};
 
 
+int main(){
+    Punct pct1(20, 10);
+    Punct pct2 = pct1;
+    Punct pct3;
+
+    Patrat patr(20, 10, 5);
+    Patrat patrat2 = patr;
+    std::cout<<patr<<std::endl<<patrat2<<std::endl;
+    std::cin>>patr;
+    std::cout<<patr<<std::endl<<patrat2<<std::endl;
+    Romb rmb(5,3,3,10,20);
+    std::cout<<rmb.getPctColtOp();
+
+
+//    pct3.actualizare(3,4);
+//    std::cout<<pct3;
+//
+
+//    std::cout<<*pct2.x<<" "<<*pct2.y<<std::endl;
+//    std::cout<<*pct1.x<<" "<<*pct1.y<<std::endl;
+//    *pct2.x = 5;
+//    std::cout<<*pct2.x<<" "<<*pct2.y<<std::endl;
+//    std::cout<<*pct1.x<<" "<<*pct1.y<<std::endl;
+//    pct3=pct1=pct2;
+//    std::cout<<*pct3.x<<" "<<*pct3.y<<std::endl;
+//    std::cout<<*pct2.x<<" "<<*pct2.y<<std::endl;
+//    std::cout<<*pct1.x<<" "<<*pct1.y<<std::endl;
+//    std::cout<<pct2<<std::endl<<pct1<<std::endl;
+//    std::cin>>pct1>>pct2;
+//    std::cout<<pct1<<std::endl<<pct2<<std::endl;
+}
