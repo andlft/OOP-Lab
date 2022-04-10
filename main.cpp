@@ -312,7 +312,12 @@ public:
         baza2 = baza2_;
     }
 
-    Trapez(const Trapez &trapez):Paralelogram(trapez.pct_st_jos.getX(),
+    Trapez(const Trapez &trapez):Patrat(
+            trapez.pct_st_jos.getX(),
+            trapez.pct_st_jos.getY(),
+            trapez.latura
+            ),
+                                Paralelogram(trapez.pct_st_jos.getX(),
                                               trapez.pct_st_jos.getY(),
                                               trapez.latura,
                                               trapez.latura2,
