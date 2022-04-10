@@ -39,17 +39,17 @@ public:
         return x;
     }
 
-    void setX(float x_) {
-        x = x_;
-    }
+//    void setX(float x_) {
+//        x = x_;
+//    }
 
     float getY() const {
         return y;
     }
 
-    void setY(float y_) {
-        y = y_;
-    }
+//    void setY(float y_) {
+//        y = y_;
+//    }
 
     bool operator==(const Punct &rhs) const {
         return x == rhs.x && y == rhs.y;
