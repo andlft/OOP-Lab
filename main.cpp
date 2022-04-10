@@ -196,11 +196,11 @@ public:
         return pct_colt_op;
     }
 
-    void setPctColtOp(float x, float y) {
-        pct_colt_op.setX(x);
-        pct_colt_op.setY(y);
-
-    }
+//    void setPctColtOp(float x, float y) {
+//        pct_colt_op.setX(x);
+//        pct_colt_op.setY(y);
+//
+//    }
 
     virtual ~Romb() = default;
 
