@@ -72,10 +72,7 @@ public:
         latura = latura_;
     }
 
-    Patrat(const Patrat &patrat){ //constructor de copiere
-        pct_st_jos = patrat.pct_st_jos;
-        latura = patrat.latura;
-    }
+    Patrat(const Patrat &patrat): pct_st_jos(patrat.pct_st_jos), latura(patrat.latura){} //constructor de copiere
     virtual ~Patrat() = default;
 
     Patrat& operator= (const Patrat& patrat_){
@@ -94,21 +91,21 @@ public:
         return i;
     }
 
-    Punct getPctStJos() const {
-        return pct_st_jos;
-    }
+//    Punct getPctStJos() const {
+//        return pct_st_jos;
+//    }
+//
+//    void setPctStJos(Punct pctStJos) {
+//        pct_st_jos = pctStJos;
+//    }
 
-    void setPctStJos(Punct pctStJos) {
-        pct_st_jos = pctStJos;
-    }
-
-    float getLatura() const {
-        return latura;
-    }
-
-    void setLatura(float latura_) {
-        Patrat::latura = latura_;
-    }
+//    float getLatura() const {
+//        return latura;
+//    }
+//
+//    void setLatura(float latura_) {
+//        Patrat::latura = latura_;
+//    }
 
     bool operator==(const Patrat &rhs) const {
         return pct_st_jos == rhs.pct_st_jos &&
@@ -140,13 +137,13 @@ public:
         latura2 = dreptunghi_.latura2;
     }
 
-    float getLatura2() const {  //getter
-        return latura2;
-    }
-
-    void setLatura2(float latura2_) { //setter
-        Dreptunghi::latura2 = latura2_;
-    }
+//    float getLatura2() const {  //getter
+//        return latura2;
+//    }
+//
+//    void setLatura2(float latura2_) { //setter
+//        Dreptunghi::latura2 = latura2_;
+//    }
 
     virtual ~Dreptunghi() = default;
 
@@ -189,9 +186,10 @@ public:
     }
     //constructor cu parametrii
 
-    Romb(const Romb &romb):Patrat(romb.pct_st_jos.getX(), romb.pct_st_jos.getY(), romb.latura){
-        pct_colt_op = romb.pct_colt_op;
-    }
+    Romb(const Romb &romb):Patrat(romb.pct_st_jos.getX(),
+                                  romb.pct_st_jos.getY(),
+                                  romb.latura),
+                                  pct_colt_op(romb.pct_colt_op){}
 
 
     Punct getPctColtOp() const {
@@ -329,18 +327,19 @@ public:
 
     ~Trapez() = default;
 
-    float getBaza2() const {
-        return baza2;
-    }
-
-    void setBaza2(float baza2_) {
-        Trapez::baza2 = baza2_;
-    }
+//    float getBaza2() const {
+//        return baza2;
+//    }
+//
+//    void setBaza2(float baza2_) {
+//        Trapez::baza2 = baza2_;
+//    }
     Trapez& operator= (const Trapez &trpz){
         pct_st_jos = trpz.pct_st_jos;
         latura = trpz.latura;
         latura2 = trpz.latura2;
         pct_colt_op = trpz.pct_colt_op;
+        baza2 = trpz.baza2;
         return *this;
     }
 
@@ -397,140 +396,3 @@ int main(){
 //    std::cout<<pct1<<std::endl<<pct2<<std::endl;
 }
 
-/*
- * #include <string>
-#include <iostream>
-#include <memory>
-#include <vector>
-
-enum class PetType {
-    Dog,
-    Cat
-};
-
-class Pet {
-private:
-    std::string name;
-    int age;
-public:
-    const std::string &getName() const {
-        return name;
-    }
-
-    void setName(const std::string &name) {
-        Pet::name = name;
-    }
-
-    int getAge() const {
-        return age;
-    }
-
-    void setAge(int age) {
-        Pet::age = age;
-    }
-
-    Pet(std::string name, int age) : name(std::move(name)), age(age) {}
-
-    virtual std::string makeSound() const = 0;
-
-    virtual PetType getType() const = 0;
-
-    virtual void print(std::ostream &os) const = 0;
-
-    void sayHello() {
-        std::cout << makeSound() << " I am " << name << '\n';
-    }
-
-    virtual ~Pet() = default;
-
-    friend std::ostream &operator<<(std::ostream &os, const Pet *pet) {
-        pet->print(os);
-        return os;
-    }
-};
-
-class Dog : public Pet {
-public:
-    Dog(std::string name, int age) : Pet(std::move(name), age) {
-    }
-
-    Dog(const Dog& dog) : Pet(dog.getName(), dog.getAge()){ }
-
-    std::string makeSound() const override {
-        return "Woof!";
-    }
-
-    void print(std::ostream &os) const override {
-        os << "Dog " << getName() << '\n';
-    }
-
-    PetType getType() const override {
-        return PetType::Dog;
-    }
-
-    void fetch() const {
-        std::cout << "Dog fetched ball\n";
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const Dog &dog) {
-        dog.print(os);
-        return os;
-    }
-};
-
-class Cat : public Pet {
-public:
-    Cat(const std::string &name, int age) : Pet(name, age) {}
-
-    std::string makeSound() const override {
-        return "Meow!";
-    }
-
-    void print(std::ostream &os) const override {
-        os << "Cat " << getName() << '\n';
-    }
-
-    PetType getType() const override {
-        return PetType::Cat;
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const Cat &cat) {
-        cat.print(os);
-        return os;
-    }
-};
-
-class PetShop {
-    static std::vector<std::shared_ptr<Pet>> pets;
-public:
-
-    static void addPet(const std::shared_ptr<Pet> &pet) {
-        pets.push_back(pet);
-    }
-
-    static std::vector<std::shared_ptr<Pet>> getPets() {
-        return pets;
-    }
-
-    static void showAllDogs() {
-        for (auto &pet: PetShop::getPets()) {
-            if (pet->getType() == PetType::Dog) {
-                auto dog = std::dynamic_pointer_cast<Dog>(pet);
-                dog->fetch();
-            }
-        }
-    }
-};
-
-std::vector<std::shared_ptr<Pet>> PetShop::pets;
-
-int main() {
-    auto dog = std::make_shared<Dog>("Scooby", 3);
-    auto cat = std::make_shared<Cat>("Kitty", 2);
-
-    PetShop::addPet(dog);
-    PetShop::addPet(cat);
-
-    PetShop::showAllDogs();
-}
- */
