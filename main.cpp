@@ -1,4 +1,8 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
+//#include <memory>
+#include <string>
+//#include <typeinfo>
 
 class Punct{
 private:
@@ -83,6 +87,7 @@ public:
 
     friend std::ostream& operator<< (std::ostream& o, const Patrat &patrat_){
         o<<patrat_.pct_st_jos<<" "<<patrat_.latura;
+        o<<" ";
         return o;
     }
 
@@ -115,6 +120,10 @@ public:
     bool operator!=(const Patrat &rhs) const {
         return !(rhs == *this);
     }
+
+    virtual float arie () {
+        return latura*latura;
+    };
 };
 
 class Dreptunghi : virtual public Patrat{
@@ -171,6 +180,9 @@ public:
     friend std::istream &operator>>(std::istream &is, Dreptunghi &dreptunghi){
         is >> dreptunghi.pct_st_jos>>dreptunghi.latura >> dreptunghi.latura2;
         return is;
+    }
+    virtual float arie(){
+        return latura*latura2;
     }
 };
 
@@ -363,19 +375,141 @@ public:
     }
 };
 
+//class Shapes {
+//    static std::vector<std::shared_ptr<Patrat>> shapes;
+//public:
+//    static void addShape (const std::shared_ptr<Patrat> &shp){
+//        shapes.push_back(shp);
+//    }
+//    static std::vector<std::shared_ptr<Patrat>> getShapes(){
+//        return shapes;
+//    }
+//
+//    static void showPatrate(){
+//        for (int i = 0; i < static_cast<int>(getShapes().size()); i++){
+//            auto p= std::dynamic_pointer_cast<Dreptunghi>(shapes[i]);
+//            if(p != nullptr){
+//                    std::cout<<"patrat: "<<*p<<"\n";
+//            }
+//        }
+//    }
+//};
+
+//std::vector <std::shared_ptr<Patrat>> Shapes::shapes;
+
+class Shapes{
+    static std::vector<Patrat*> shapes;
+public:
+    static void addShape (Patrat &patrat){
+        shapes.push_back(&patrat);
+    }
+    static void deleteShape (int i){
+        shapes.erase(shapes.begin()+i);
+    }
+    static void showShapes(std::string type){
+        for (int i = 0; i < static_cast <int> (shapes.size()); i++ ){
+
+            if(type == typeid(Patrat).name()){
+                Patrat *d = dynamic_cast<Patrat*>(shapes[i]);
+                if(d!= nullptr) {
+                    std::cout << "patrat: " << *d << "\n";
+                }
+            }
+            if(type == typeid(Dreptunghi).name()) {
+                Dreptunghi *d = dynamic_cast<Dreptunghi *>(shapes[i]);
+                if (d != nullptr){
+                std::cout << "dreptunghi: " << *d << "\n";
+               }
+            }
+            if(type == typeid(Romb).name()) {
+                Romb *d = dynamic_cast<Romb *>(shapes[i]);
+                if(d!= nullptr){
+                std::cout << "romb: " << *d << "\n";
+                }
+            }
+            if(type == typeid(Paralelogram).name()) {
+                Paralelogram *d = dynamic_cast<Paralelogram *>(shapes[i]);
+                if(d != nullptr){
+                std::cout << "paralelogram: " << *d << "\n";
+                }
+            }
+            if(type == typeid(Trapez).name()) {
+                Trapez *d = dynamic_cast<Trapez *>(shapes[i]);
+                if(d != nullptr){
+                std::cout << "trapez: " << *d << "\n";
+                }
+            }
+        }
+    }
+
+    static void showAllShapes(){
+        for (int i = 0; i < static_cast <int> (shapes.size()); i++ ){
+            std::cout<<i<<": ";
+            Trapez *d5 = dynamic_cast<Trapez *>(shapes[i]);
+            if(d5 != nullptr){
+                std::cout << "trapez: " << *d5 << "\n";
+                continue;
+            }
+            Paralelogram *d4 = dynamic_cast<Paralelogram *>(shapes[i]);
+            if(d4 != nullptr){
+                std::cout << "paralelogram: " << *d4 << "\n";
+                continue;
+            }
+            Romb *d3 = dynamic_cast<Romb *>(shapes[i]);
+            if(d3!= nullptr){
+                std::cout << "romb: " << *d3 << "\n";
+                continue;
+            }
+
+            Dreptunghi *d2 = dynamic_cast<Dreptunghi *>(shapes[i]);
+            if (d2 != nullptr){
+                std::cout << "dreptunghi: " << *d2 << "\n";
+                continue;
+            }
+            Patrat *d1 = dynamic_cast<Patrat*>(shapes[i]);
+            if(d1!= nullptr) {
+                std::cout << "patrat: " << *d1<< "\n";
+                continue;
+            }
+
+        }
+    }
+};
+
+std:: vector <Patrat*> Shapes::shapes;
+
 
 int main(){
-    Punct pct1(20, 10);
-    std::cout<<pct1;
-    Punct pct3;
 
-    Patrat patr(20, 10, 5);
-    Patrat patrat2 = patr;
-    std::cout<<patr<<std::endl<<patrat2<<std::endl;
-    std::cin>>patr;
-    std::cout<<patr<<std::endl<<patrat2<<std::endl;
-    Romb rmb(5,3,3,10,20);
-    std::cout<<rmb.getPctColtOp();
+//    auto patrat = std::make_shared<Patrat>(3, 5, 4);
+//    auto drept = std::make_shared<Dreptunghi>(3, 5, 6, 5);
+
+Patrat patrat (3,4,5);
+Patrat patrat2 (10, 20, 30);
+Dreptunghi drept (7, 8, 9, 10);
+    Shapes::addShape(patrat);
+    Shapes::addShape(drept);
+    Shapes::showAllShapes();
+    Shapes::deleteShape(1);
+
+
+
+
+//    Shapes::showShapes(typeid(Dreptunghi).name());
+    std::cout<<"-----------------------"<<std::endl;
+    Shapes::showAllShapes();
+    return 0;
+//    Punct pct1(20, 10);
+//    std::cout<<pct1;
+//    Punct pct3;
+//
+//    Patrat patr(20, 10, 5);
+//    Patrat patrat2 = patr;
+//    std::cout<<patr<<std::endl<<patrat2<<std::endl;
+//    std::cin>>patr;
+//    std::cout<<patr<<std::endl<<patrat2<<std::endl;
+//    Romb rmb(5,3,3,10,20);
+//    std::cout<<rmb.getPctColtOp();
 
 
 //    pct3.actualizare(3,4);
