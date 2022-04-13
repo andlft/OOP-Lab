@@ -595,7 +595,7 @@ public:
         <<"Numar optiune: ";
         try{std::cin>>option;
         if(option<0||option>5) throw noOption();}
-        catch (const noOption &e){
+        catch (...){
             std::cout<<"Introdu un numar valid\n";
         }
         std::cout<<"-----------------------------------------------\n";
