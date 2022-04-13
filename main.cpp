@@ -4,6 +4,9 @@
 #include <string>
 //#include <typeinfo>
 
+//unde sunt setteri si getteri comentati, i-am comentat pentru ca nu ii foloseam in program,
+//iar daca erau nefolositi, nu puteam sa obtin bifa pe github.
+
 class Punct{
 private:
     float x;
@@ -513,7 +516,7 @@ class noInput : public std::exception{
 public:
     noInput()=default;
     const char* what() const noexcept override{
-        return "Fix for Ubuntu Clang 11 sanitizers :)";
+        return "No input";
     }
 };
 
@@ -681,12 +684,6 @@ public:
 };
 
 int main() {
-//    int a = 0;
-//    std::cout << "Alege ce doresti sa faci:" << std::endl
-//              << "1. Porneste programul\n2. Inchide programul\n";
-//
-//    std::cin >> a;
-//    if (a == 2) return 0;
 
     try {
         Menu meniu;
