@@ -401,7 +401,7 @@ public:
         return shapes[index]->arie();
     }
 
-    static void showShapes(std::string type){
+    static void showShapes(const std::string &type){
         for (int i = 0; i < static_cast<int>(getShapes().size()); i++){
 
             auto d1 = std::dynamic_pointer_cast<Trapez>(shapes[i]);
