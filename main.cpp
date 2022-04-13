@@ -738,9 +738,9 @@ int main(){
 //
 
     std::cout<<"Program pentru retinerea si calcularea ariilor unor figuri geometrice"<<std::endl;
-    std::string a;
-    std::cout<<"Intordu un numele tau:"<<std::endl;
-    std::getline(std::cin, a);
+    int a;
+    std::cout<<"Intordu un numar pentru a porni programul :"<<std::endl;
+    std::cin>>a;
     Menu meniu;
     meniu.Menu::runMenu();
 
