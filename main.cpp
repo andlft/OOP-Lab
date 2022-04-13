@@ -736,7 +736,11 @@ int main(){
 //    Shapes::addShape(drept);
 //    Shapes::showAllShapes();
 //
+
     std::cout<<"Program pentru retinerea si calcularea ariilor unor figuri geometrice"<<std::endl;
+    std::string a;
+    std::cout<<"Intordu un numele tau:"<<std::endl;
+    std::getline(std::cin, a);
     Menu meniu;
     meniu.Menu::runMenu();
 
