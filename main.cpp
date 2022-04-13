@@ -135,13 +135,13 @@ public:
             Patrat(x, y, latura) {
         latura2 = latura2_;
     }
-    //constructor de initializare cu parametrii
+
 
 
     Dreptunghi(const Dreptunghi & dreptunghi_):Patrat(dreptunghi_.pct_st_jos.getX(),
                                                       dreptunghi_.pct_st_jos.getY(),
                                                       dreptunghi_.latura)
-    { //constructor de copiere
+    { 
         latura2 = dreptunghi_.latura2;
     }
 
@@ -490,94 +490,23 @@ public:
 
 std::vector <std::shared_ptr<Patrat>> Shapes::shapes;
 
-/*
-//class Shapes{
-//    static std::vector<Patrat*> shapes;
-//public:
-//    static void addShape (Patrat &patrat){
-//        shapes.push_back(&patrat);
-//    }
-//    static void deleteShape (int i){
-//        shapes.erase(shapes.begin()+i);
-//    }
-//    static void showShapes(std::string type){
-//        for (int i = 0; i < static_cast <int> (shapes.size()); i++ ){
-//
-//            if(type == typeid(Patrat).name()){
-//                Patrat *d = dynamic_cast<Patrat*>(shapes[i]);
-//                if(d!= nullptr) {
-//                    std::cout << "patrat: " << *d << "\n";
-//                }
-//            }
-//            if(type == typeid(Dreptunghi).name()) {
-//                Dreptunghi *d = dynamic_cast<Dreptunghi *>(shapes[i]);
-//                if (d != nullptr){
-//                std::cout << "dreptunghi: " << *d << "\n";
-//               }
-//            }
-//            if(type == typeid(Romb).name()) {
-//                Romb *d = dynamic_cast<Romb *>(shapes[i]);
-//                if(d!= nullptr){
-//                std::cout << "romb: " << *d << "\n";
-//                }
-//            }
-//            if(type == typeid(Paralelogram).name()) {
-//                Paralelogram *d = dynamic_cast<Paralelogram *>(shapes[i]);
-//                if(d != nullptr){
-//                std::cout << "paralelogram: " << *d << "\n";
-//                }
-//            }
-//            if(type == typeid(Trapez).name()) {
-//                Trapez *d = dynamic_cast<Trapez *>(shapes[i]);
-//                if(d != nullptr){
-//                std::cout << "trapez: " << *d << "\n";
-//                }
-//            }
-//        }
-//    }
-//
-//    static void showAllShapes(){
-//        for (int i = 0; i < static_cast <int> (shapes.size()); i++ ){
-//            std::cout<<i<<": ";
-//            Trapez *d5 = dynamic_cast<Trapez *>(shapes[i]);
-//            if(d5 != nullptr){
-//                std::cout << "trapez: " << *d5 << "\n";
-//                continue;
-//            }
-//            Paralelogram *d4 = dynamic_cast<Paralelogram *>(shapes[i]);
-//            if(d4 != nullptr){
-//                std::cout << "paralelogram: " << *d4 << "\n";
-//                continue;
-//            }
-//            Romb *d3 = dynamic_cast<Romb *>(shapes[i]);
-//            if(d3!= nullptr){
-//                std::cout << "romb: " << *d3 << "\n";
-//                continue;
-//            }
-//
-//            Dreptunghi *d2 = dynamic_cast<Dreptunghi *>(shapes[i]);
-//            if (d2 != nullptr){
-//                std::cout << "dreptunghi: " << *d2 << "\n";
-//                continue;
-//            }
-//            Patrat *d1 = dynamic_cast<Patrat*>(shapes[i]);
-//            if(d1!= nullptr) {
-//                std::cout << "patrat: " << *d1<< "\n";
-//                continue;
-//            }
-//
-//        }
-//    }
-//};
-//
-//std:: vector <Patrat*> Shapes::shapes;
- */
-
 class noOption : public std::exception{
 public:
     noOption()=default;
     const char* what() const noexcept override{
-        return "Nu exista optiunea!";
+        return "-------------------------------------------------------------"
+               "\nNu exista optiunea, intordu un numar valid!\n"
+               "-------------------------------------------------------------\n";
+    }
+};
+
+class noObject : public std::exception{
+public:
+    noObject()=default;
+    const char* what() const noexcept override{
+        return "-------------------------------------------------------------"
+               "\nNu exista un obiect la indexul respectiv, intordu un index valid!\n"
+               "-------------------------------------------------------------\n";
     }
 };
 
@@ -593,13 +522,9 @@ public:
                  <<"5.Calculeaza aria unei forme\n"
                  <<"0.Iesire din program\n"
                  <<"Numar optiune: ";
-//        std::cin>>option;
-        try{std::cin>>option;
-        if(option<0||option>5) throw noOption();}
-        catch (const noOption &e)
-        {throw e;
-            std::cout<<"Introdu un numar valid\n";
-        }
+
+        if(!(std::cin>>option)) throw noOption();
+        if(option > 5 || option < 0) throw noOption();
         std::cout<<"-----------------------------------------------\n";
     }
     void showAvailableShapes(){
@@ -610,88 +535,120 @@ public:
                  <<"4.Paralelogram\n"
                  <<"5.Trapez\n"
                  <<"Numar forma:";
-        std::cin>>index;
+        if(!(std::cin>>index)) throw noOption();
+        if(index > 5 || index < 0) throw noOption();
         std::cout<<"-----------------------------------------------\n";
     }
     void showIndexQuestion(){
         std::cout<<"Da indexul formei:\n";
         std::cin>>index;
+        if(index < 0 || index >= static_cast <int>(Shapes::getShapes().size())){
+            throw noObject();
+        }
     }
 
     void addShape(){
-        showAvailableShapes();
-        if (index==1){
-            float x, y, z;
-            std::cout<<"Da x si y punct si dimensiunea laturii:\n";
-            std::cin>>x>>y>>z;
-            auto p = std::make_shared<Patrat>(Patrat(x,y,z));
-            Shapes::addShape(p);}
+        try {
+            showAvailableShapes();
+            if (index == 1) {
+                float x, y, z;
+                std::cout << "Da x si y punct si dimensiunea laturii:\n";
+                std::cin >> x >> y >> z;
+                auto p = std::make_shared<Patrat>(Patrat(x, y, z));
+                Shapes::addShape(p);
+            }
 
-        if (index==2){
-            float x, y, z, w;
-            std::cout<<"Da x si y punct si dimensiunile laturilor 1 si 2\n";
-            std::cin>>x>>y>>z>>w;
-            auto p = std::make_shared<Dreptunghi>(Dreptunghi(x,y,z,w));
-            Shapes::addShape(p);
+            if (index == 2) {
+                float x, y, z, w;
+                std::cout << "Da x si y punct si dimensiunile laturilor 1 si 2\n";
+                std::cin >> x >> y >> z >> w;
+                auto p = std::make_shared<Dreptunghi>(Dreptunghi(x, y, z, w));
+                Shapes::addShape(p);
+            }
+            if (index == 3) {
+                float x, y, z, w, u;
+                std::cout << "Da x si y punct si dimensiunea laturii si x si y pentru punctul opus\n";
+                std::cin >> x >> y >> z >> w >> u;
+                auto p = std::make_shared<Romb>(Romb(x, y, z, w, u));
+                Shapes::addShape(p);
+            }
+            if (index == 4) {
+                float x, y, z, w, u, r;
+                std::cout << "Da x si y punct, dimensiunea laturii1 si laturii2 si x si y pentru punctul opus\n";
+                std::cin >> x >> y >> z >> w >> u >> r;
+                auto p = std::make_shared<Paralelogram>(Paralelogram(x, y, z, w, u, r));
+                Shapes::addShape(p);
+            }
+            if (index == 5) {
+                float x, y, z, w, u, r, t;
+                std::cout
+                        << "Da x si y punct, dimensiunea laturii1 si laturii2 si x si y pentru punctul opus si baza a 2 a\n";
+                std::cin >> x >> y >> z >> w >> u >> r >> t;
+                Trapez trpz(x, y, z, w, u, r, t);
+                auto p = std::make_shared<Trapez>(x, y, z, w, u, r, t);
+                Shapes::addShape(p);
+            }
         }
-        if (index==3){
-            float x, y, z, w, u;
-            std::cout<<"Da x si y punct si dimensiunea laturii si x si y pentru punctul opus\n";
-            std::cin>>x>>y>>z>>w>>u;
-            auto p = std::make_shared<Romb>(Romb(x,y,z,w,u));
-            Shapes::addShape(p);
-        }
-        if (index==4){
-            float x, y, z, w, u, r;
-            std::cout<<"Da x si y punct, dimensiunea laturii1 si laturii2 si x si y pentru punctul opus\n";
-            std::cin>>x>>y>>z>>w>>u>>r;
-            auto p = std::make_shared<Paralelogram>(Paralelogram(x,y,z,w,u,r));
-            Shapes::addShape(p);
-        }
-        if(index==5){
-            float x, y, z, w, u, r, t;
-            std::cout<<"Da x si y punct, dimensiunea laturii1 si laturii2 si x si y pentru punctul opus si baza a 2 a\n";
-            std::cin>>x>>y>>z>>w>>u>>r>>t;
-            Trapez trpz(x,y,z,w,u,r,t);
-            auto p = std::make_shared<Trapez>(x,y,z,w,u,r,t);
-            Shapes::addShape(p);
+        catch (const noOption &e){
+            std::cout<<e.what()<<std::endl;
         }
     }
 
     void deleteShape(){
-        showIndexQuestion();
-        Shapes::deleteShape(index);
+        try{
+            showIndexQuestion();
+            Shapes::deleteShape(index);
+        }
+        catch (const noObject &e){
+            std::cout<<e.what()<<std::endl;
+        }
+
     }
     void showShape(){
-        showAvailableShapes();
-        if(index==1){
-            Shapes::showShapes(typeid(Patrat).name());
+        try {
+            showAvailableShapes();
+            if (index == 1) {
+                Shapes::showShapes(typeid(Patrat).name());
+            }
+            if (index == 2) {
+                Shapes::showShapes(typeid(Dreptunghi).name());
+            }
+            if (index == 3) {
+                Shapes::showShapes(typeid(Romb).name());
+            }
+            if (index == 4) {
+                Shapes::showShapes(typeid(Paralelogram).name());
+            }
+            if (index == 5) {
+                Shapes::showShapes(typeid(Trapez).name());
+            }
+            std::cout << "-----------------------------------------------\n";
         }
-        if(index==2){
-            Shapes::showShapes(typeid(Dreptunghi).name());
+        catch (const noOption &e){
+            std::cout<<e.what()<<std::endl;
         }
-        if(index==3){
-            Shapes::showShapes(typeid(Romb).name());
-        }
-        if(index==4){
-            Shapes::showShapes(typeid(Paralelogram).name());
-        }
-        if(index==5){
-            Shapes::showShapes(typeid(Trapez).name());
-        }
-        std::cout<<"-----------------------------------------------\n";
     }
 
     void showArea(){
-        showIndexQuestion();
-        std::cout<<"Aria este: "<<Shapes::showArea(index)<<"\n"
-                 <<"--------------------------------------------------"<<"\n";
-
+        try{
+            showIndexQuestion();
+            std::cout<<"Aria este: "<<Shapes::showArea(index)<<"\n"
+                     <<"--------------------------------------------------"<<"\n";
+        }
+        catch (const noObject &e){
+            std::cout<<e.what()<<std::endl;
+        }
     }
 
     void runMenu(){
         while(option!=0){
-            showMenu();
+            try{
+                showMenu();
+            }
+            catch (const noOption &e){
+                std::cout<<e.what()<<std::endl;
+                continue;
+            }
             if(option == 1){
                 addShape();
             }
@@ -714,71 +671,16 @@ public:
 
 };
 
-int main(){
+int main() {
 
-//    auto patrat = std::make_shared<Patrat>(3, 5, 4);
-//    auto drept = std::make_shared<Dreptunghi>(3, 5, 6, 5);
-//    auto trpz = std::make_shared<Trapez>(1,2,3,4,5,6,7);
-//    auto patrat = std::make_shared<Patrat>(1,2,3);
-//    auto romb = std::make_shared<Romb>(1,2,3,46,6);
-//    auto drpt = std::make_shared<Dreptunghi>(1,2,3,4);
-//    auto prlg =std::make_shared<Paralelogram>(1,2,3,4,5,6);
-//    Shapes::addShape(patrat);
-//    Shapes::addShape(drpt);
-//    Shapes::addShape(romb);
-//    Shapes::addShape(trpz);
-//    Shapes::addShape(prlg);
-//    Shapes::showAllShapes();
-//    Paralelogram pr(1, 2, 3, 4 ,5, 8);
-//    std::cout<<pr;
-////Patrat patrat (3,4,5);
-////Patrat patrat2 (10, 20, 30);
-////Dreptunghi drept (7, 8, 9, 10);
-//    Shapes::addShape(patrat);
-//    Shapes::addShape(drept);
-//    Shapes::showAllShapes();
-//    Shapes::deleteShape(1);
-std::cout<<"Introdu un numar pentru a porni programul"<<std::endl;
+    std::cout << "Alege ce doresti sa faci:" << std::endl
+              << "1. Porneste programul\n2. Inchide programul\n";
     int a;
-    if(!(std::cin>>a))
-        return 0;
+    std::cin >> a;
+    if (a == 2) return 0;
+
     Menu meniu;
     meniu.Menu::runMenu();
 
-
-
-
-////    Shapes::showShapes(typeid(Dreptunghi).name());
-//    std::cout<<"-----------------------"<<std::endl;
-//    Shapes::showAllShapes();
     return 0;
-//    Punct pct1(20, 10);
-//    std::cout<<pct1;
-//    Punct pct3;
-//
-//    Patrat patr(20, 10, 5);
-//    Patrat patrat2 = patr;
-//    std::cout<<patr<<std::endl<<patrat2<<std::endl;
-//    std::cin>>patr;
-//    std::cout<<patr<<std::endl<<patrat2<<std::endl;
-//    Romb rmb(5,3,3,10,20);
-//    std::cout<<rmb.getPctColtOp();
-
-
-//    pct3.actualizare(3,4);
-//    std::cout<<pct3;
-//
-
-//    std::cout<<*pct2.x<<" "<<*pct2.y<<std::endl;
-//    std::cout<<*pct1.x<<" "<<*pct1.y<<std::endl;
-//    *pct2.x = 5;
-//    std::cout<<*pct2.x<<" "<<*pct2.y<<std::endl;
-//    std::cout<<*pct1.x<<" "<<*pct1.y<<std::endl;
-//    pct3=pct1=pct2;
-//    std::cout<<*pct3.x<<" "<<*pct3.y<<std::endl;
-//    std::cout<<*pct2.x<<" "<<*pct2.y<<std::endl;
-//    std::cout<<*pct1.x<<" "<<*pct1.y<<std::endl;
-//    std::cout<<pct2<<std::endl<<pct1<<std::endl;
-//    std::cin>>pct1>>pct2;
-//    std::cout<<pct1<<std::endl<<pct2<<std::endl;
 }
