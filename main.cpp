@@ -181,7 +181,7 @@ public:
         is >> dreptunghi.pct_st_jos>>dreptunghi.latura >> dreptunghi.latura2;
         return is;
     }
-    virtual float arie(){
+    virtual float arie() override{
         return latura*latura2;
     }
 };
@@ -204,9 +204,9 @@ public:
                                   pct_colt_op(romb.pct_colt_op){}
 
 
-    Punct getPctColtOp() const {
-        return pct_colt_op;
-    }
+//    Punct getPctColtOp() const {
+//        return pct_colt_op;
+//    }
 
 //    void setPctColtOp(float x, float y) {
 //        pct_colt_op.setX(x);
@@ -240,7 +240,7 @@ public:
         is >> romb.pct_st_jos >> romb.latura >> romb.pct_colt_op;
         return is;
     }
-    virtual float arie(){
+    virtual float arie() override{
         return latura * (pct_colt_op.getY()-pct_st_jos.getY());
     }
 };
@@ -307,7 +307,7 @@ public:
         >>paralelogram.pct_colt_op;
         return is;
     }
-    virtual float arie(){
+    virtual float arie() override{
         return latura * (pct_st_jos.getY()-pct_colt_op.getY());
     }
 
@@ -381,7 +381,7 @@ public:
     bool operator!=(const Trapez &rhs) const {
         return !(rhs == *this);
     }
-    virtual float arie(){
+    virtual float arie() override{
         return (latura+baza2)/2 * (pct_st_jos.getY()-pct_colt_op.getY());
     }
 };
@@ -402,7 +402,7 @@ public:
         return shapes[index]->arie();
     }
 
-    static void showShapes(std::string type){
+    static void showShapes(const std::string &type){
         for (int i = 0; i < static_cast<int>(getShapes().size()); i++){
 
             auto d1 = std::dynamic_pointer_cast<Trapez>(shapes[i]);
@@ -577,9 +577,9 @@ std::vector <std::shared_ptr<Patrat>> Shapes::shapes;
 class noOption : public std::exception{
 public:
     noOption()=default;
-    const char* what() const noexcept override{
-        return "Nu exista optiunea!";
-    }
+//    const char* what() const noexcept override{
+//        return "Nu exista optiunea!";
+//    }
 };
 class Menu{
     int option = -1, index = 0;
@@ -735,9 +735,7 @@ int main(){
 //    Shapes::addShape(drept);
 //    Shapes::showAllShapes();
 //    Shapes::deleteShape(1);
-    int a;
-    if(!(std::cin>>a))
-        return 0;
+
     Menu meniu;
     meniu.Menu::runMenu();
 
