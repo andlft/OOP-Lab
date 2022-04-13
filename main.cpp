@@ -141,7 +141,7 @@ public:
     Dreptunghi(const Dreptunghi & dreptunghi_):Patrat(dreptunghi_.pct_st_jos.getX(),
                                                       dreptunghi_.pct_st_jos.getY(),
                                                       dreptunghi_.latura)
-    { 
+    {
         latura2 = dreptunghi_.latura2;
     }
 
@@ -672,10 +672,10 @@ public:
 };
 
 int main() {
-
+    int a = 0;
     std::cout << "Alege ce doresti sa faci:" << std::endl
               << "1. Porneste programul\n2. Inchide programul\n";
-    int a;
+
     std::cin >> a;
     if (a == 2) return 0;
 
