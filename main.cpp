@@ -592,7 +592,7 @@ public:
         <<"4.Arata formele de un anumit tip\n"
         <<"5.Calculeaza aria unei forme\n"
         <<"0.Iesire din program\n"
-        <<"Numar optiune: ";
+        <<"Numar optiune: "<<std::endl;
         std::cin>>option;
 //        try{std::cin>>option;
 //        if(option<0||option>5) throw noOption();}
@@ -735,10 +735,8 @@ int main(){
 //    Shapes::addShape(patrat);
 //    Shapes::addShape(drept);
 //    Shapes::showAllShapes();
-//    Shapes::deleteShape(1);
-    int a;
-    if(!(std::cin>>a))
-        return 0;
+//
+    std::cout<<"Program pentru retinerea si calcularea ariilor unor figuri geometrice"<<std::endl;
     Menu meniu;
     meniu.Menu::runMenu();
 
