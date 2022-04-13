@@ -656,7 +656,7 @@ public:
             }
             catch (const noOption &e){
                 std::cout<<e.what()<<std::endl;
-                continue;
+                option = 0 ;
             }
             if(option == 1){
                 addShape();
