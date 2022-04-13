@@ -132,16 +132,16 @@ public:
     Dreptunghi() = default;
 
     Dreptunghi(const float &x, const float &y, const float &latura,const float latura2_) :
-    Patrat(x, y, latura) {
+            Patrat(x, y, latura) {
         latura2 = latura2_;
     }
-         //constructor de initializare cu parametrii
+    //constructor de initializare cu parametrii
 
 
     Dreptunghi(const Dreptunghi & dreptunghi_):Patrat(dreptunghi_.pct_st_jos.getX(),
                                                       dreptunghi_.pct_st_jos.getY(),
                                                       dreptunghi_.latura)
-                                                      { //constructor de copiere
+    { //constructor de copiere
         latura2 = dreptunghi_.latura2;
     }
 
@@ -192,7 +192,7 @@ public:
     Romb(){}//consturctor fara parametrii
 
     Romb(const float &x, const float &y, const float &latura, const float &z, const float&w) :
-    Patrat(x, y, latura)  {
+            Patrat(x, y, latura)  {
         pct_colt_op.actualizare(z,w);
     }
     //constructor cu parametrii
@@ -200,7 +200,7 @@ public:
     Romb(const Romb &romb):Patrat(romb.pct_st_jos.getX(),
                                   romb.pct_st_jos.getY(),
                                   romb.latura),
-                                  pct_colt_op(romb.pct_colt_op){}
+                           pct_colt_op(romb.pct_colt_op){}
 
 //
 //    Punct getPctColtOp() const {
@@ -248,42 +248,42 @@ class Paralelogram : public Dreptunghi, public Romb{
 public:
     Paralelogram() = default;
 
-            Paralelogram(
+    Paralelogram(
 
-    const float &x_,
-    const float &y_,
-    const float &latura_,
-    const float &latura2_,
-    const float &x2_,
-    const float &y2_
+            const float &x_,
+            const float &y_,
+            const float &latura_,
+            const float &latura2_,
+            const float &x2_,
+            const float &y2_
     )
     {
-                pct_st_jos.actualizare(x_,y_);
-                latura = latura_;
-                latura2=latura2_;
-                pct_colt_op.actualizare(x2_,y2_);
-            }
+        pct_st_jos.actualizare(x_,y_);
+        latura = latura_;
+        latura2=latura2_;
+        pct_colt_op.actualizare(x2_,y2_);
+    }
 
     Paralelogram(const Paralelogram &prlgrm): Patrat(prlgrm.pct_st_jos.getX(),
                                                      prlgrm.pct_st_jos.getY(),
                                                      prlgrm.latura),
-                                                        Dreptunghi(prlgrm.pct_st_jos.getX(),
+                                              Dreptunghi(prlgrm.pct_st_jos.getX(),
                                                          prlgrm.pct_st_jos.getY(),
                                                          prlgrm.latura,
                                                          prlgrm.latura2),
-                                                         Romb(prlgrm.pct_st_jos.getX(),
-                                                              prlgrm.pct_st_jos.getY(),
-                                                              prlgrm.latura,
-                                                              prlgrm.pct_colt_op.getX(),
-                                                              prlgrm.pct_colt_op.getY()
-                                                         ){};
+                                              Romb(prlgrm.pct_st_jos.getX(),
+                                                   prlgrm.pct_st_jos.getY(),
+                                                   prlgrm.latura,
+                                                   prlgrm.pct_colt_op.getX(),
+                                                   prlgrm.pct_colt_op.getY()
+                                              ){};
 
 
     virtual ~Paralelogram() = default;
 
     bool operator==(const Paralelogram &rhs) const {
         return static_cast<const Romb &>(*this) == static_cast<const Romb &>(rhs) &&
-                static_cast<const Dreptunghi &>(*this) == static_cast<const Dreptunghi &>(rhs);
+               static_cast<const Dreptunghi &>(*this) == static_cast<const Dreptunghi &>(rhs);
     }
 
     Paralelogram& operator= (const Paralelogram &prlgrm){
@@ -301,9 +301,9 @@ public:
 
     friend std::istream &operator>>(std::istream &is, Paralelogram &paralelogram){
         is >> paralelogram.pct_st_jos
-        >>paralelogram.latura
-        >>paralelogram.latura2
-        >>paralelogram.pct_colt_op;
+           >>paralelogram.latura
+           >>paralelogram.latura2
+           >>paralelogram.pct_colt_op;
         return is;
     }
     virtual float arie() override{
@@ -324,7 +324,7 @@ public:
            const float &x2,
            const float &y2,
            const float &baza2_
-           ): Paralelogram(x,y,latura,latura2, x2, y2)
+    ): Paralelogram(x,y,latura,latura2, x2, y2)
     {
         baza2 = baza2_;
     }
@@ -333,8 +333,8 @@ public:
             trapez.pct_st_jos.getX(),
             trapez.pct_st_jos.getY(),
             trapez.latura
-            ),
-                                Paralelogram(trapez.pct_st_jos.getX(),
+    ),
+                                 Paralelogram(trapez.pct_st_jos.getX(),
                                               trapez.pct_st_jos.getY(),
                                               trapez.latura,
                                               trapez.latura2,
@@ -394,7 +394,7 @@ public:
     static std::vector<std::shared_ptr<Patrat>> getShapes(){
         return shapes;
     }
-        static void deleteShape (int i){
+    static void deleteShape (int i){
         shapes.erase(shapes.begin()+i);
     }
     static float showArea(int index){
@@ -425,7 +425,7 @@ public:
             auto d3 = std::dynamic_pointer_cast<Romb>(shapes[i]);
             if(d3!=nullptr){
                 if(type == typeid(Romb).name())
-                 {
+                {
                     std::cout<<"Romb: "<< *d3<<"\n";
                     continue;
                 }
@@ -435,7 +435,7 @@ public:
             auto d4 = std::dynamic_pointer_cast<Dreptunghi>(shapes[i]);
             if(d4!=nullptr){
                 if(type == typeid(Dreptunghi).name())
-                 {
+                {
                     std::cout<<"Dreptunghi: "<< *d4<<"\n";
                     continue;
                 }
@@ -452,9 +452,9 @@ public:
                 else continue;
             }
 
-            }
         }
-        static void showAllShapes(){
+    }
+    static void showAllShapes(){
         for (int i = 0; i < static_cast <int> (shapes.size()); i++ ){
             std::cout<<i<<": ";
             auto d5 = std::dynamic_pointer_cast<Trapez>(shapes[i]);
@@ -586,13 +586,13 @@ class Menu{
 public:
     void showMenu(){
         std::cout<<"Alege optiunea pe care o doresti:\n"
-        <<"1.Adauga o forma\n"
-        <<"2.Sterge o forma\n"
-        <<"3.Arata toate formele\n"
-        <<"4.Arata formele de un anumit tip\n"
-        <<"5.Calculeaza aria unei forme\n"
-        <<"0.Iesire din program\n"
-        <<"Numar optiune: "<<std::endl;
+                 <<"1.Adauga o forma\n"
+                 <<"2.Sterge o forma\n"
+                 <<"3.Arata toate formele\n"
+                 <<"4.Arata formele de un anumit tip\n"
+                 <<"5.Calculeaza aria unei forme\n"
+                 <<"0.Iesire din program\n"
+                 <<"Numar optiune: ";
         std::cin>>option;
 //        try{std::cin>>option;
 //        if(option<0||option>5) throw noOption();}
@@ -603,12 +603,12 @@ public:
     }
     void showAvailableShapes(){
         std::cout<<"Ce forma doresti?\n"
-        <<"1.Patrat\n"
-        <<"2.Dreptunghi\n"
-        <<"3.Romb\n"
-        <<"4.Paralelogram\n"
-        <<"5.Trapez\n"
-        <<"Numar forma:";
+                 <<"1.Patrat\n"
+                 <<"2.Dreptunghi\n"
+                 <<"3.Romb\n"
+                 <<"4.Paralelogram\n"
+                 <<"5.Trapez\n"
+                 <<"Numar forma:";
         std::cin>>index;
         std::cout<<"-----------------------------------------------\n";
     }
@@ -618,7 +618,7 @@ public:
     }
 
     void addShape(){
-    showAvailableShapes();
+        showAvailableShapes();
         if (index==1){
             float x, y, z;
             std::cout<<"Da x si y punct si dimensiunea laturii:\n";
@@ -684,7 +684,7 @@ public:
     void showArea(){
         showIndexQuestion();
         std::cout<<"Aria este: "<<Shapes::showArea(index)<<"\n"
-        <<"--------------------------------------------------"<<"\n";
+                 <<"--------------------------------------------------"<<"\n";
 
     }
 
@@ -735,12 +735,11 @@ int main(){
 //    Shapes::addShape(patrat);
 //    Shapes::addShape(drept);
 //    Shapes::showAllShapes();
-//
-
-    std::cout<<"Program pentru retinerea si calcularea ariilor unor figuri geometrice"<<std::endl;
+//    Shapes::deleteShape(1);
+std::cout<<"Introdu un numar pentru a porni programul"<<std::endl;
     int a;
-    std::cout<<"Intordu un numar pentru a porni programul :"<<std::endl;
-    std::cin>>a;
+    if(!(std::cin>>a))
+        return 0;
     Menu meniu;
     meniu.Menu::runMenu();
 
