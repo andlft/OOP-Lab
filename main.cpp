@@ -103,7 +103,6 @@ public:
 //    void setPctStJos(Punct pctStJos) {
 //        pct_st_jos = pctStJos;
 //    }
-
 //    float getLatura() const {
 //        return latura;
 //    }
@@ -203,7 +202,7 @@ public:
                                   romb.latura),
                                   pct_colt_op(romb.pct_colt_op){}
 
-
+//
 //    Punct getPctColtOp() const {
 //        return pct_colt_op;
 //    }
@@ -402,7 +401,7 @@ public:
         return shapes[index]->arie();
     }
 
-    static void showShapes(const std::string &type){
+    static void showShapes(std::string type){
         for (int i = 0; i < static_cast<int>(getShapes().size()); i++){
 
             auto d1 = std::dynamic_pointer_cast<Trapez>(shapes[i]);
@@ -597,8 +596,7 @@ public:
         std::cin>>option;
 //        try{std::cin>>option;
 //        if(option<0||option>5) throw noOption();}
-//        catch (...){
-//            std::cout<<nop.what()<<std::endl;
+//        catch (const noOption &e){
 //            std::cout<<"Introdu un numar valid\n";
 //        }
         std::cout<<"-----------------------------------------------\n";
@@ -738,7 +736,9 @@ int main(){
 //    Shapes::addShape(drept);
 //    Shapes::showAllShapes();
 //    Shapes::deleteShape(1);
-
+    int a;
+    if(!(std::cin>>a))
+        return 0;
     Menu meniu;
     meniu.Menu::runMenu();
 
@@ -779,4 +779,3 @@ int main(){
 //    std::cin>>pct1>>pct2;
 //    std::cout<<pct1<<std::endl<<pct2<<std::endl;
 }
-
