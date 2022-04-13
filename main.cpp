@@ -509,6 +509,13 @@ public:
                "-------------------------------------------------------------\n";
     }
 };
+class noInput : public std::exception{
+public:
+    noInput()=default;
+    const char* what() const noexcept override{
+        return "Fix for Ubuntu Clang 11 sanitizers :)";
+    }
+};
 
 class Menu{
     int option = -1, index = 0;
@@ -523,7 +530,9 @@ public:
                  <<"0.Iesire din program\n"
                  <<"Numar optiune: ";
 
+
         if(!(std::cin>>option)) throw noOption();
+        if(option == -1) throw noInput();
         if(option > 5 || option < 0) throw noOption();
         std::cout<<"-----------------------------------------------\n";
     }
@@ -672,15 +681,19 @@ public:
 };
 
 int main() {
-    int a = 0;
-    std::cout << "Alege ce doresti sa faci:" << std::endl
-              << "1. Porneste programul\n2. Inchide programul\n";
+//    int a = 0;
+//    std::cout << "Alege ce doresti sa faci:" << std::endl
+//              << "1. Porneste programul\n2. Inchide programul\n";
+//
+//    std::cin >> a;
+//    if (a == 2) return 0;
 
-    std::cin >> a;
-    if (a == 2) return 0;
-
-    Menu meniu;
-    meniu.Menu::runMenu();
-
+    try {
+        Menu meniu;
+        meniu.Menu::runMenu();
+    }
+    catch (const noInput &e){
+        std::cout<<e.what()<<std::endl;
+    }
     return 0;
 }
