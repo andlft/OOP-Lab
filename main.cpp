@@ -574,6 +574,13 @@ std::vector <std::shared_ptr<Patrat>> Shapes::shapes;
 //std:: vector <Patrat*> Shapes::shapes;
  */
 
+class noOption : public std::exception{
+public:
+    noOption()=default;
+    const char* what() const noexcept override{
+        return "Nu exista optiunea!";
+    }
+};
 class Menu{
     int option = -1, index = 0;
 public:
@@ -586,7 +593,11 @@ public:
         <<"5.Calculeaza aria unei forme\n"
         <<"0.Iesire din program\n"
         <<"Numar optiune: ";
-        std::cin>>option;
+        try{std::cin>>option;
+        if(option<0||option>5) throw noOption();}
+        catch (const noOption &e){
+            std::cout<<"Introdu un numar valid\n";
+        }
         std::cout<<"-----------------------------------------------\n";
     }
     void showAvailableShapes(){
@@ -701,10 +712,7 @@ public:
 };
 
 int main(){
-    Patrat patrat(2,3,4);
-    std::cout<<patrat.arie()<<std::endl;
-    Romb romb(1,2,3,4,5);
-    std::cout<<romb.arie()<<std::endl;
+
 //    auto patrat = std::make_shared<Patrat>(3, 5, 4);
 //    auto drept = std::make_shared<Dreptunghi>(3, 5, 6, 5);
 //    auto trpz = std::make_shared<Trapez>(1,2,3,4,5,6,7);
@@ -727,6 +735,9 @@ int main(){
 //    Shapes::addShape(drept);
 //    Shapes::showAllShapes();
 //    Shapes::deleteShape(1);
+    int a;
+    if(!(std::cin>>a))
+        return 0;
     Menu meniu;
     meniu.Menu::runMenu();
 
