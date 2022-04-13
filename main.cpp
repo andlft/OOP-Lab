@@ -574,13 +574,14 @@ std::vector <std::shared_ptr<Patrat>> Shapes::shapes;
 //std:: vector <Patrat*> Shapes::shapes;
  */
 
-class noOption : public std::exception{
-public:
-    noOption()=default;
+//class noOption : public std::exception{
+//public:
+//    noOption()=default;
 //    const char* what() const noexcept override{
 //        return "Nu exista optiunea!";
 //    }
-};
+//};
+
 class Menu{
     int option = -1, index = 0;
 public:
@@ -593,11 +594,13 @@ public:
         <<"5.Calculeaza aria unei forme\n"
         <<"0.Iesire din program\n"
         <<"Numar optiune: ";
-        try{std::cin>>option;
-        if(option<0||option>5) throw noOption();}
-        catch (...){
-            std::cout<<"Introdu un numar valid\n";
-        }
+        std::cin>>option;
+//        try{std::cin>>option;
+//        if(option<0||option>5) throw noOption();}
+//        catch (...){
+//            std::cout<<nop.what()<<std::endl;
+//            std::cout<<"Introdu un numar valid\n";
+//        }
         std::cout<<"-----------------------------------------------\n";
     }
     void showAvailableShapes(){
