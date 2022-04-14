@@ -44,18 +44,18 @@ public:
     float getX() const {
         return x;
     }
-[[maybe_unused]]
-    void setX(float x_) {
-        x = x_;
-    }
+//[[maybe_unused]]
+//    void setX(float x_) {
+//        x = x_;
+//    }
 
     float getY() const {
         return y;
     }
-[[maybe_unused]]
-    void setY(float y_) {
-        y = y_;
-    }
+//[[maybe_unused]]
+//    void setY(float y_) {
+//        y = y_;
+//    }
 
     bool operator==(const Punct &rhs) const {
         return x == rhs.x && y == rhs.y;
@@ -97,21 +97,21 @@ public:
         i>>patrat_.pct_st_jos >>patrat_.latura;
         return i;
     }
-[[maybe_unused]]
-    Punct getPctStJos() const {
-        return pct_st_jos;
-    }
-[[maybe_unused]]
-    void setPctStJos(Punct pctStJos) {
-        pct_st_jos = pctStJos;
-    }
-    float getLatura() const {
-        return latura;
-    }
-[[maybe_unused]]
-    void setLatura(float latura_) {
-        Patrat::latura = latura_;
-    }
+//[[maybe_unused]]
+//    Punct getPctStJos() const {
+//        return pct_st_jos;
+//    }
+//[[maybe_unused]]
+//    void setPctStJos(Punct pctStJos) {
+//        pct_st_jos = pctStJos;
+//    }
+//    float getLatura() const {
+//        return latura;
+//    }
+//[[maybe_unused]]
+//    void setLatura(float latura_) {
+//        Patrat::latura = latura_;
+//    }
 
     bool operator==(const Patrat &rhs) const {
         return pct_st_jos == rhs.pct_st_jos &&
@@ -146,14 +146,14 @@ public:
     {
         latura2 = dreptunghi_.latura2;
     }
-[[maybe_unused]]
-    float getLatura2() const {  //getter
-        return latura2;
-    }
-[[maybe_unused]]
-    void setLatura2(float latura2_) { //setter
-        Dreptunghi::latura2 = latura2_;
-    }
+//[[maybe_unused]]
+//    float getLatura2() const {  //getter
+//        return latura2;
+//    }
+//[[maybe_unused]]
+//    void setLatura2(float latura2_) { //setter
+//        Dreptunghi::latura2 = latura2_;
+//    }
 
     virtual ~Dreptunghi() = default;
 
@@ -204,16 +204,16 @@ public:
                                   romb.latura),
                            pct_colt_op(romb.pct_colt_op){}
 
-[[maybe_unused]]
-    Punct getPctColtOp() const {
-        return pct_colt_op;
-    }
-[[maybe_unused]]
-    void setPctColtOp(float x, float y) {
-        pct_colt_op.setX(x);
-        pct_colt_op.setY(y);
-
-    }
+//[[maybe_unused]]
+//    Punct getPctColtOp() const {
+//        return pct_colt_op;
+//    }
+//[[maybe_unused]]
+//    void setPctColtOp(float x, float y) {
+//        pct_colt_op.setX(x);
+//        pct_colt_op.setY(y);
+//
+//    }
 
     virtual ~Romb() = default;
 
@@ -347,14 +347,16 @@ public:
     }
 
     ~Trapez() = default;
-[[maybe_unused]]
-    float getBaza2() const {
-        return baza2;
-    }
-[[maybe_unused]]
-    void setBaza2(float baza2_) {
-        Trapez::baza2 = baza2_;
-    }
+
+//[[maybe_unused]]
+//    float getBaza2() const {
+//        return baza2;
+//    }
+//[[maybe_unused]]
+//    void setBaza2(float baza2_) {
+//        Trapez::baza2 = baza2_;
+//    }
+
     Trapez& operator= (const Trapez &trpz){
         pct_st_jos = trpz.pct_st_jos;
         latura = trpz.latura;
