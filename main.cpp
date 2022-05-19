@@ -1,697 +1,451 @@
 #include <iostream>
-#include <vector>
 #include <memory>
 #include <string>
-#include <exception>
-//#include <typeinfo>
+#include <vector>
 
+using namespace std;
 
-class Punct{
-private:
-    float x;
-    float y;
-public:
-    Punct() = default;
+class Produs{
 
-    Punct(float x_, float y_){    // constructor de initializare parametrizat
-        x = x_;
-        y = y_;
-    }
-
-    Punct(const Punct &pct){     // constructor de copiere
-        x = pct.x;
-        y = pct.y;
-    }
-    virtual ~Punct() = default;
-
-    Punct& operator= (const Punct &pct) = default;
-
-    friend std::ostream& operator<< (std::ostream& o, const Punct &pct){
-        o<<pct.x<<" "<<pct.y;
-        return o;
-    }
-
-    friend std::istream& operator>> (std::istream& i, Punct &pct){
-        i>>pct.x >>pct.y;
-        return i;
-    }
-
-    void actualizare(const float& x_, const float& y_){
-        x = x_;
-        y = y_;
-    }
-
-    float getX() const {
-        return x;
-    }
-//[[maybe_unused]]
-//    void setX(float x_) {
-//        x = x_;
-//    }
-
-    float getY() const {
-        return y;
-    }
-//[[maybe_unused]]
-//    void setY(float y_) {
-//        y = y_;
-//    }
-
-    bool operator==(const Punct &rhs) const {
-        return x == rhs.x && y == rhs.y;
-    }
-
-    bool operator!=(const Punct &rhs) const {
-        return !(rhs == *this);
-    }
-};
-
-class Patrat{
 protected:
-    Punct pct_st_jos;
-    float latura;
+    float pret;
+    int cantitate;
+    static int id;
+
 public:
-    Patrat() = default;
-
-    Patrat(const float& x, const float& y,const float& latura_){  //constructor cu parametrii
-        pct_st_jos.actualizare(x,y);
-        latura = latura_;
-    }
-
-    Patrat(const Patrat &patrat): pct_st_jos(patrat.pct_st_jos), latura(patrat.latura){} //constructor de copiere
-    virtual ~Patrat() = default;
-
-    Patrat& operator= (const Patrat& patrat_){
-        pct_st_jos = patrat_.pct_st_jos;
-        latura = patrat_.latura;
-        return *this;
-    }
-
-    friend std::ostream& operator<< (std::ostream& o, const Patrat &patrat_){
-        o<<patrat_.pct_st_jos<<" "<<patrat_.latura;
-        o<<" ";
-        return o;
-    }
-
-    friend std::istream& operator>> (std::istream& i, Patrat &patrat_){
-        i>>patrat_.pct_st_jos >>patrat_.latura;
-        return i;
-    }
-//[[maybe_unused]]
-//    Punct getPctStJos() const {
-//        return pct_st_jos;
-//    }
-//[[maybe_unused]]
-//    void setPctStJos(Punct pctStJos) {
-//        pct_st_jos = pctStJos;
-//    }
-//    float getLatura() const {
-//        return latura;
-//    }
-//[[maybe_unused]]
-//    void setLatura(float latura_) {
-//        Patrat::latura = latura_;
-//    }
-
-    bool operator==(const Patrat &rhs) const {
-        return pct_st_jos == rhs.pct_st_jos &&
-               latura == rhs.latura;
-    }
-
-    bool operator!=(const Patrat &rhs) const {
-        return !(rhs == *this);
-    }
-
-    virtual float arie () {
-        return latura*latura;
+    Produs(float pret, int cantitate) : pret(pret), cantitate(cantitate) {
+        id++;
     };
+    Produs(const Produs & prod){
+        this->pret = prod.pret;
+        this->cantitate = prod.cantitate;
+    }
+
+    virtual ~Produs() {
+        id--;
+    }
+
+    float getPret() const {
+        return pret;
+    }
+
+    void setPret(float pret_) {
+        Produs::pret = pret_;
+    }
+
+    int getCantitate() const {
+        return cantitate;
+    }
+
+    void setCantitate(int cantitate_) {
+        Produs::cantitate = cantitate_;
+    }
+
+    static int getId() {
+        return id;
+    }
+
+    static void setId(int id_) {
+        Produs::id = id_;
+    }
+
+    bool operator==(const Produs &rhs) const {
+        return pret == rhs.pret &&
+               cantitate == rhs.cantitate;
+    }
+
+    bool operator!=(const Produs &rhs) const {
+        return !(rhs == *this);
+    }
+
+    friend ostream &operator<<(ostream &os, const Produs &produs) {
+        os << "pret: " << produs.pret << " cantitate: " << produs.cantitate << " id_produs: ";
+        return os;
+    }
+
+    friend istream &operator>>(istream &is, Produs &produs){
+        is >> produs.pret >> produs.cantitate;
+        return is;
+    }
+
+
+
 };
 
-class Dreptunghi : virtual public Patrat{
+class Carte : public Produs {
+
 protected:
-    float latura2;
+    string titlul;
+    vector<string> autori;
+
 public:
-    Dreptunghi() = default;
+    Carte(float pret, int cantitate, const string &titlul, const vector<string> &autori) : Produs(pret, cantitate),
+                                                                                           titlul(titlul),
+                                                                                           autori(autori) {}
 
-    Dreptunghi(const float &x, const float &y, const float &latura,const float latura2_) :
-            Patrat(x, y, latura) {
-        latura2 = latura2_;
+    Carte(const Carte &carte) : Produs(carte.getPret(), carte.getCantitate()) {
+        this->titlul = carte.titlul;
+        this->autori = carte.autori;
     }
 
+    virtual ~Carte() {}
 
-
-    Dreptunghi(const Dreptunghi & dreptunghi_):Patrat(dreptunghi_.pct_st_jos.getX(),
-                                                      dreptunghi_.pct_st_jos.getY(),
-                                                      dreptunghi_.latura)
-    {
-        latura2 = dreptunghi_.latura2;
-    }
-//[[maybe_unused]]
-//    float getLatura2() const {  //getter
-//        return latura2;
-//    }
-//[[maybe_unused]]
-//    void setLatura2(float latura2_) { //setter
-//        Dreptunghi::latura2 = latura2_;
-//    }
-
-    virtual ~Dreptunghi() = default;
-
-    Dreptunghi& operator= (const Dreptunghi &drptg){
-        pct_st_jos = drptg.pct_st_jos;
-        latura = drptg.latura;
-        latura2 = drptg.latura2;
-        return *this;
+    const string &getTitlul() const {
+        return titlul;
     }
 
-    bool operator==(const Dreptunghi &rhs) const {   //operator ==
-        return static_cast<const Patrat &>(*this) == static_cast<const Patrat &>(rhs) &&
-               latura2 == rhs.latura2;
+    void setTitlul(const string &titlul_) {
+        Carte::titlul = titlul_;
     }
 
-    bool operator!=(const Dreptunghi &rhs) const {  //operator !=
+    const vector<string> &getAutori() const {
+        return autori;
+    }
+
+    void setAutori(const vector<string> &autori_) {
+        Carte::autori = autori_;
+    }
+
+    bool operator==(const Carte &rhs) const {
+        return static_cast<const Produs &>(*this) == static_cast<const Produs &>(rhs) &&
+               titlul == rhs.titlul &&
+               autori == rhs.autori;
+    }
+
+    bool operator!=(const Carte &rhs) const {
         return !(rhs == *this);
     }
 
-    friend std::ostream &operator<<(std::ostream &os, const Dreptunghi &dreptunghi) {
-        os << static_cast<const Patrat &>(dreptunghi) <<  dreptunghi.latura2;
+    friend ostream &operator<<(ostream &os, const Carte &carte) {
+        os << static_cast<const Produs &>(carte) << " titlul: " << carte.titlul << " autori: " << carte.autori[0];
         return os;
-    }
+    };
 
-    friend std::istream &operator>>(std::istream &is, Dreptunghi &dreptunghi){
-        is >> dreptunghi.pct_st_jos>>dreptunghi.latura >> dreptunghi.latura2;
+    friend istream &operator>>(istream &is, Carte carte) {
+        is >> carte.pret >> carte.cantitate >> carte.titlul >> carte.autori[0];
         return is;
-    }
-    virtual float arie() override{
-        return latura*latura2;
-    }
-};
+        return is;
+    };
 
-class Romb : virtual public Patrat{
+};
+class DVD : public Produs{
+
 protected:
-    Punct pct_colt_op;
+    int nr_minute;
+
 public:
-    Romb(){}//consturctor fara parametrii
-
-    Romb(const float &x, const float &y, const float &latura, const float &z, const float&w) :
-            Patrat(x, y, latura)  {
-        pct_colt_op.actualizare(z,w);
-    }
-    //constructor cu parametrii
-
-    Romb(const Romb &romb):Patrat(romb.pct_st_jos.getX(),
-                                  romb.pct_st_jos.getY(),
-                                  romb.latura),
-                           pct_colt_op(romb.pct_colt_op){}
-
-//[[maybe_unused]]
-//    Punct getPctColtOp() const {
-//        return pct_colt_op;
-//    }
-//[[maybe_unused]]
-//    void setPctColtOp(float x, float y) {
-//        pct_colt_op.setX(x);
-//        pct_colt_op.setY(y);
-//
-//    }
-
-    virtual ~Romb() = default;
-
-    bool operator==(const Romb &rhs) const {
-        return static_cast<const Patrat &>(*this) == static_cast<const Patrat &>(rhs) &&
-               pct_colt_op == rhs.pct_colt_op;
+    DVD(float pret, int cantitate, int nrMinute) : Produs(pret, cantitate), nr_minute(nrMinute) {};
+    DVD(const DVD &dvd): Produs(dvd.pret, dvd.cantitate){
+    this->nr_minute = dvd.nr_minute;
     }
 
-    bool operator!=(const Romb &rhs) const {
+    virtual ~DVD() {}
+
+    int getNrMinute() const {
+        return nr_minute;
+    }
+
+    void setNrMinute(int nrMinute) {
+        nr_minute = nrMinute;
+    }
+
+    bool operator==(const DVD &rhs) const {
+        return static_cast<const Produs &>(*this) == static_cast<const Produs &>(rhs) &&
+               nr_minute == rhs.nr_minute;
+    }
+
+    bool operator!=(const DVD &rhs) const {
         return !(rhs == *this);
     }
 
-    Romb& operator= (const Romb &rmb){
-        pct_st_jos = rmb.pct_st_jos;
-        pct_colt_op = rmb.pct_colt_op;
-        latura = rmb.latura;
-        return *this;
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const Romb &romb) {
-        os << static_cast<const Patrat &>(romb) << romb.pct_colt_op;
+    friend ostream &operator<<(ostream &os, const DVD &dvd) {
+        os << static_cast<const Produs &>(dvd) << " nr_minute: " << dvd.nr_minute;
         return os;
     }
-    friend std::istream &operator>>(std::istream &is, Romb &romb) {
-        is >> romb.pct_st_jos >> romb.latura >> romb.pct_colt_op;
+    friend istream &operator>>(istream &is, DVD &dvd){
+        is >> dvd.pret >>dvd.cantitate>>dvd.nr_minute;
         return is;
-    }
-    virtual float arie() override{
-        return latura * (pct_colt_op.getY()-pct_st_jos.getY());
-    }
-};
-
-class Paralelogram : public Dreptunghi, public Romb{
-public:
-    Paralelogram() = default;
-
-    Paralelogram(
-
-            const float &x_,
-            const float &y_,
-            const float &latura_,
-            const float &latura2_,
-            const float &x2_,
-            const float &y2_
-    )
-    {
-        pct_st_jos.actualizare(x_,y_);
-        latura = latura_;
-        latura2=latura2_;
-        pct_colt_op.actualizare(x2_,y2_);
-    }
-
-    Paralelogram(const Paralelogram &prlgrm): Patrat(prlgrm.pct_st_jos.getX(),
-                                                     prlgrm.pct_st_jos.getY(),
-                                                     prlgrm.latura),
-                                              Dreptunghi(prlgrm.pct_st_jos.getX(),
-                                                         prlgrm.pct_st_jos.getY(),
-                                                         prlgrm.latura,
-                                                         prlgrm.latura2),
-                                              Romb(prlgrm.pct_st_jos.getX(),
-                                                   prlgrm.pct_st_jos.getY(),
-                                                   prlgrm.latura,
-                                                   prlgrm.pct_colt_op.getX(),
-                                                   prlgrm.pct_colt_op.getY()
-                                              ){};
-
-
-    virtual ~Paralelogram() = default;
-
-    bool operator==(const Paralelogram &rhs) const {
-        return static_cast<const Romb &>(*this) == static_cast<const Romb &>(rhs) &&
-               static_cast<const Dreptunghi &>(*this) == static_cast<const Dreptunghi &>(rhs);
-    }
-
-    Paralelogram& operator= (const Paralelogram &prlgrm){
-        pct_st_jos = prlgrm.pct_st_jos;
-        latura=prlgrm.latura;
-        latura2=prlgrm.latura2;
-        pct_colt_op = prlgrm.pct_colt_op;
-        return *this;
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const Paralelogram &para) {
-        os << para.pct_st_jos<<" "<<para.latura<<" "<<para.latura2<<" "<<para.pct_colt_op;
-        return os;
-    }
-
-    friend std::istream &operator>>(std::istream &is, Paralelogram &paralelogram){
-        is >> paralelogram.pct_st_jos
-           >>paralelogram.latura
-           >>paralelogram.latura2
-           >>paralelogram.pct_colt_op;
-        return is;
-    }
-    virtual float arie() override{
-        return latura * (pct_st_jos.getY()-pct_colt_op.getY());
     }
 
 };
 
-class Trapez : public Paralelogram{
-    float baza2;
+class ObCol :public  Produs{
+
+protected:
+    string denumire;
+
 public:
-    Trapez() = default;
-
-    Trapez(const float &x,
-           const float &y,
-           const float &latura,
-           const float &latura2,
-           const float &x2,
-           const float &y2,
-           const float &baza2_
-    ): Paralelogram(x,y,latura,latura2, x2, y2)
-    {
-        baza2 = baza2_;
+    ObCol(float pret, int cantitate, const string &denumire) : Produs(pret, cantitate), denumire(denumire) {};
+    ObCol(const ObCol &obiect): Produs(obiect.pret, obiect.cantitate){
+        this->denumire = obiect.denumire;
     }
 
-    Trapez(const Trapez &trapez):Patrat(
-            trapez.pct_st_jos.getX(),
-            trapez.pct_st_jos.getY(),
-            trapez.latura
-    ),
-                                 Paralelogram(trapez.pct_st_jos.getX(),
-                                              trapez.pct_st_jos.getY(),
-                                              trapez.latura,
-                                              trapez.latura2,
-                                              trapez.pct_colt_op.getX(),
-                                              trapez.pct_colt_op.getY())
-    {
-        baza2 = trapez.baza2;
+    virtual ~ObCol() {}
+
+    const string &getDenumire() const {
+        return denumire;
     }
 
-    ~Trapez() = default;
-
-//[[maybe_unused]]
-//    float getBaza2() const {
-//        return baza2;
-//    }
-//[[maybe_unused]]
-//    void setBaza2(float baza2_) {
-//        Trapez::baza2 = baza2_;
-//    }
-
-    Trapez& operator= (const Trapez &trpz){
-        pct_st_jos = trpz.pct_st_jos;
-        latura = trpz.latura;
-        latura2 = trpz.latura2;
-        pct_colt_op = trpz.pct_colt_op;
-        baza2 = trpz.baza2;
-        return *this;
+    void setDenumire(const string &denumire_) {
+        ObCol::denumire = denumire_;
     }
 
-    friend std::ostream &operator<<(std::ostream &os, const Trapez &trapez) {
-        os << static_cast<const Paralelogram &>(trapez) << " "<< trapez.baza2;
-        return os;
+    bool operator==(const ObCol &rhs) const {
+        return static_cast<const Produs &>(*this) == static_cast<const Produs &>(rhs) &&
+               denumire == rhs.denumire;
     }
 
-    friend std::istream &operator>>(std::istream &is, Trapez &trapez){
-        is >> trapez.pct_st_jos >> trapez.latura >> trapez.latura2 >> trapez.pct_colt_op >> trapez.baza2;
-        return is;
-    }
-
-    bool operator==(const Trapez &rhs) const {
-        return static_cast<const Paralelogram &>(*this) == static_cast<const Paralelogram &>(rhs) &&
-               baza2 == rhs.baza2;
-    }
-
-    bool operator!=(const Trapez &rhs) const {
+    bool operator!=(const ObCol &rhs) const {
         return !(rhs == *this);
     }
-    virtual float arie() override{
-        return (latura+baza2)/2 * (pct_st_jos.getY()-pct_colt_op.getY());
+
+    friend ostream &operator<<(ostream &os, const ObCol &col) {
+        os << static_cast<const Produs &>(col) << " denumire: " << col.denumire;
+        return os;
+    }
+    friend istream &operator>>(istream &is, ObCol obiect){
+        is >> obiect.pret >> obiect.cantitate >> obiect.denumire;
+        return is;
     }
 };
 
-class Shapes {
-    static std::vector<std::shared_ptr<Patrat>> shapes;
+class DVDMuzica: public DVD{
+private:
+    string nume_album;
+    string interpreti;
 public:
-    static void addShape (const std::shared_ptr<Patrat> &shp){
-        shapes.push_back(shp);
+    DVDMuzica(float pret, int cantitate, int nrMinute, const string &numeAlbum, const string &interpreti) : DVD(pret,
+                                                                                                                cantitate,
+                                                                                                                nrMinute),
+                                                                                                            nume_album(
+                                                                                                                    numeAlbum),
+                                                                                                            interpreti(
+                                                                                                                    interpreti) {};
+    DVDMuzica(const DVDMuzica & dvd): DVD(dvd.pret, dvd.cantitate, dvd.nr_minute){
+        this->nume_album = dvd.nume_album;
+        this->interpreti = dvd.interpreti;
+
     }
-    static std::vector<std::shared_ptr<Patrat>> getShapes(){
-        return shapes;
+
+
+
+    virtual ~DVDMuzica() {}
+
+    const string &getNumeAlbum() const {
+        return nume_album;
     }
-    static void deleteShape (int i){
-        shapes.erase(shapes.begin()+i);
-    }
-    static float showArea(int index){
-        return shapes[index]->arie();
+
+    void setNumeAlbum(const string &numeAlbum) {
+        nume_album = numeAlbum;
     }
 
-    static void showShapes(const std::string &type){
-        for (int i = 0; i < static_cast<int>(getShapes().size()); i++){
-
-            auto d1 = std::dynamic_pointer_cast<Trapez>(shapes[i]);
-            if(d1!= nullptr){
-                if(type == typeid(Trapez).name())
-                {
-                    std::cout<<"Trapez: "<< *d1<<"\n";
-                    continue;
-                }
-                else continue;
-            }
-            auto d2 = std::dynamic_pointer_cast<Paralelogram>(shapes[i]);
-            if(d2!= nullptr){
-                if(type == typeid(Paralelogram).name())
-                {
-                    std::cout<<"Paralelogram: "<< *d2<<"\n";
-                    continue;
-                }
-                else continue;
-            }
-            auto d3 = std::dynamic_pointer_cast<Romb>(shapes[i]);
-            if(d3!=nullptr){
-                if(type == typeid(Romb).name())
-                {
-                    std::cout<<"Romb: "<< *d3<<"\n";
-                    continue;
-                }
-                else continue;
-            }
-
-            auto d4 = std::dynamic_pointer_cast<Dreptunghi>(shapes[i]);
-            if(d4!=nullptr){
-                if(type == typeid(Dreptunghi).name())
-                {
-                    std::cout<<"Dreptunghi: "<< *d4<<"\n";
-                    continue;
-                }
-                else continue;
-            }
-
-            auto d5 = std::dynamic_pointer_cast<Patrat>(shapes[i]);
-            if(d5!=nullptr) {
-                if(type == typeid(Patrat).name())
-                {
-                    std::cout<<"Patrat: "<< *d5<<"\n";
-                    continue;
-                }
-                else continue;
-            }
-
-        }
+    const string &getInterpreti() const {
+        return interpreti;
     }
-    static void showAllShapes(){
-        for (int i = 0; i < static_cast <int> (shapes.size()); i++ ){
-            std::cout<<i<<": ";
-            auto d5 = std::dynamic_pointer_cast<Trapez>(shapes[i]);
-            if(d5 != nullptr){
-                std::cout << "trapez: " << *d5 << "\n";
-                continue;
-            }
-            auto d4 = std::dynamic_pointer_cast<Paralelogram>(shapes[i]);
-            if(d4 != nullptr){
-                std::cout << "paralelogram: " << *d4 << "\n";
-                continue;
-            }
-            auto d3 = std::dynamic_pointer_cast<Romb>(shapes[i]);
-            if(d3!= nullptr){
-                std::cout << "romb: " << *d3 << "\n";
-                continue;
-            }
 
-            auto d2 = std::dynamic_pointer_cast<Dreptunghi>(shapes[i]);
-            if (d2 != nullptr){
-                std::cout << "dreptunghi: " << *d2 << "\n";
-                continue;
-            }
-            auto d1 = dynamic_pointer_cast<Patrat>(shapes[i]);
-            if(d1!= nullptr) {
-                std::cout << "patrat: " << *d1<< "\n";
-                continue;
-            }
-
-        }
+    void setInterpreti(const string &interpreti_) {
+        DVDMuzica::interpreti = interpreti_;
     }
+
+    bool operator==(const DVDMuzica &rhs) const {
+        return static_cast<const DVD &>(*this) == static_cast<const DVD &>(rhs) &&
+               nume_album == rhs.nume_album &&
+               interpreti == rhs.interpreti;
+    }
+
+    bool operator!=(const DVDMuzica &rhs) const {
+        return !(rhs == *this);
+    }
+
+    friend ostream &operator<<(ostream &os, const DVDMuzica &muzica) {
+        os << static_cast<const DVD &>(muzica) << " nume_album: " << muzica.nume_album << " interpreti: "
+           << muzica.interpreti;
+        return os;
+    };
+
 };
 
-std::vector <std::shared_ptr<Patrat>> Shapes::shapes;
+class DVDFilm : public DVD{
 
-class noOption : public std::exception{
+private:
+    string nume_film;
+    string gen_film;
 public:
-    noOption()=default;
-    const char* what() const noexcept override{
-        return "-------------------------------------------------------------"
-               "\nNu exista optiunea, intordu un numar valid!\n"
-               "-------------------------------------------------------------\n";
+    DVDFilm(float pret, int cantitate, int nrMinute, const string &numeFilm, const string &genFilm) : DVD(pret,
+                                                                                                          cantitate,
+                                                                                                          nrMinute),
+                                                                                                      nume_film(
+                                                                                                              numeFilm),
+                                                                                                      gen_film(
+                                                                                                              genFilm) {};
+
+
+    DVDFilm(const DVDFilm &dvd):DVD(dvd.pret,dvd.cantitate,dvd.nr_minute){
+        this->nume_film = dvd.nume_film;
+        this->gen_film = dvd.gen_film;
     }
+
+    virtual ~DVDFilm() {
+
+    }
+
+    const string &getNumeFilm() const {
+        return nume_film;
+    }
+
+    void setNumeFilm(const string &numeFilm) {
+        nume_film = numeFilm;
+    }
+
+    const string &getGenFilm() const {
+        return gen_film;
+    }
+
+    void setGenFilm(const string &genFilm) {
+        gen_film = genFilm;
+    }
+
+    bool operator==(const DVDFilm &rhs) const {
+        return static_cast<const DVD &>(*this) == static_cast<const DVD &>(rhs) &&
+               nume_film == rhs.nume_film &&
+               gen_film == rhs.gen_film;
+    }
+
+    bool operator!=(const DVDFilm &rhs) const {
+        return !(rhs == *this);
+    }
+
+    friend ostream &operator<<(ostream &os, const DVDFilm &film) {
+        os << static_cast<const DVD &>(film) << " nume_film: " << film.nume_film << " gen_film: " << film.gen_film;
+        return os;
+    }
+
 };
 
-class noObject : public std::exception{
+
+class ObColFig : public ObCol{
+
+private:
+    string categorie;
+    string brand;
+    string material;
 public:
-    noObject()=default;
-    const char* what() const noexcept override{
-        return "-------------------------------------------------------------"
-               "\nNu exista un obiect la indexul respectiv, introdu un index valid!\n"
-               "-------------------------------------------------------------\n";
+    ObColFig(float pret, int cantitate, const string &denumire, const string &categorie, const string &brand,
+             const string &material) : ObCol(pret, cantitate, denumire), categorie(categorie), brand(brand),
+                                       material(material) {};
+    ObColFig(const ObColFig &obiect): ObCol(obiect.pret, obiect.cantitate, obiect.denumire){
+        this->categorie = obiect.categorie;
+        this->brand = obiect.brand;
+        this->material = obiect.material;
+
     }
+
+    virtual ~ObColFig() {
+
+    }
+
+    const string &getCategorie() const {
+        return categorie;
+    }
+
+    void setCategorie(const string &categorie_) {
+        ObColFig::categorie = categorie_;
+    }
+
+    const string &getBrand() const {
+        return brand;
+    }
+
+    void setBrand(const string &brand_) {
+        ObColFig::brand = brand_;
+    }
+
+    const string &getMaterial() const {
+        return material;
+    }
+
+    void setMaterial(const string &material_) {
+        ObColFig::material = material_;
+    }
+
+    bool operator==(const ObColFig &rhs) const {
+        return static_cast<const ObCol &>(*this) == static_cast<const ObCol &>(rhs) &&
+               categorie == rhs.categorie &&
+               brand == rhs.brand &&
+               material == rhs.material;
+    }
+
+    bool operator!=(const ObColFig &rhs) const {
+        return !(rhs == *this);
+    }
+
+    friend ostream &operator<<(ostream &os, const ObColFig &fig) {
+        os << static_cast<const ObCol &>(fig) << " categorie: " << fig.categorie << " brand: " << fig.brand
+           << " material: " << fig.material;
+        return os;
+    }
+    friend istream &operator>>(istream &is, ObColFig fig) {
+        is >> fig.pret>>fig.cantitate>>fig.denumire>>fig.categorie>>fig.material>>fig.brand;
+        return is;
+    }
+
 };
-class noInput : public std::exception{
+
+class ObColPos : public ObCol{
+private:
+    string format;
 public:
-    noInput()=default;
-    const char* what() const noexcept override{
-        return "No input";
+    ObColPos(float pret, int cantitate, const string &denumire, const string &format) : ObCol(pret, cantitate,
+                                                                                              denumire),
+                                                                                        format(format) {};
+    ObColPos(const ObColPos &obiect):ObCol(obiect.pret, obiect.cantitate, obiect.denumire){
+        this->format = obiect.format;
     }
+
+    virtual ~ObColPos() {
+
+    }
+
+    const string &getFormat() const {
+        return format;
+    }
+
+    void setFormat(const string &format_) {
+        ObColPos::format = format_;
+    }
+
+    bool operator==(const ObColPos &rhs) const {
+        return static_cast<const ObCol &>(*this) == static_cast<const ObCol &>(rhs) &&
+               format == rhs.format;
+    }
+
+    bool operator!=(const ObColPos &rhs) const {
+        return !(rhs == *this);
+    }
+
+    friend ostream &operator<<(ostream &os, const ObColPos &pos) {
+        os << static_cast<const ObCol &>(pos) << " format: " << pos.format;
+        return os;
+    }
+    friend istream &operator>>(istream &is, ObColPos &obiect){
+        is>>obiect.pret>>obiect.cantitate>>obiect.denumire>>obiect.format;
+        return is;
+    }
+
 };
 
-class Menu{
-    int option = -1, index = 0;
+class Meniu{
+    static vector<shared_ptr<Produs>> produse;
 public:
-    void showMenu(){
-        std::cout<<"Alege optiunea pe care o doresti:\n"
-                 <<"1.Adauga o forma\n"
-                 <<"2.Sterge o forma\n"
-                 <<"3.Arata toate formele\n"
-                 <<"4.Arata formele de un anumit tip\n"
-                 <<"5.Calculeaza aria unei forme\n"
-                 <<"0.Iesire din program\n"
-                 <<"Numar optiune: ";
-
-
-        if(!(std::cin>>option)) throw noOption();
-        if(option == -1) throw noInput();
-        if(option > 5 || option < 0) throw noOption();
-        std::cout<<"-----------------------------------------------\n";
+    static void add_produs(const shared_ptr<Produs> produs) {
+        produse.push_back(produs);
     }
-    void showAvailableShapes(){
-        std::cout<<"Ce forma doresti?\n"
-                 <<"1.Patrat\n"
-                 <<"2.Dreptunghi\n"
-                 <<"3.Romb\n"
-                 <<"4.Paralelogram\n"
-                 <<"5.Trapez\n"
-                 <<"Numar forma:";
-        if(!(std::cin>>index)) throw noOption();
-        if(index > 5 || index < 0) throw noOption();
-        std::cout<<"-----------------------------------------------\n";
-    }
-    void showIndexQuestion(){
-        std::cout<<"Da indexul formei:\n";
-        std::cin>>index;
-        if(index < 0 || index >= static_cast <int>(Shapes::getShapes().size())){
-            throw noObject();
-        }
-    }
-
-    void addShape(){
-        try {
-            showAvailableShapes();
-            if (index == 1) {
-                float x, y, z;
-                std::cout << "Da x si y punct si dimensiunea laturii:\n";
-                std::cin >> x >> y >> z;
-                auto p = std::make_shared<Patrat>(Patrat(x, y, z));
-                Shapes::addShape(p);
-            }
-
-            if (index == 2) {
-                float x, y, z, w;
-                std::cout << "Da x si y punct si dimensiunile laturilor 1 si 2\n";
-                std::cin >> x >> y >> z >> w;
-                auto p = std::make_shared<Dreptunghi>(Dreptunghi(x, y, z, w));
-                Shapes::addShape(p);
-            }
-            if (index == 3) {
-                float x, y, z, w, u;
-                std::cout << "Da x si y punct si dimensiunea laturii si x si y pentru punctul opus\n";
-                std::cin >> x >> y >> z >> w >> u;
-                auto p = std::make_shared<Romb>(Romb(x, y, z, w, u));
-                Shapes::addShape(p);
-            }
-            if (index == 4) {
-                float x, y, z, w, u, r;
-                std::cout << "Da x si y punct, dimensiunea laturii1 si laturii2 si x si y pentru punctul opus\n";
-                std::cin >> x >> y >> z >> w >> u >> r;
-                auto p = std::make_shared<Paralelogram>(Paralelogram(x, y, z, w, u, r));
-                Shapes::addShape(p);
-            }
-            if (index == 5) {
-                float x, y, z, w, u, r, t;
-                std::cout
-                        << "Da x si y punct, dimensiunea laturii1 si laturii2 si x si y pentru punctul opus si baza a 2 a\n";
-                std::cin >> x >> y >> z >> w >> u >> r >> t;
-                Trapez trpz(x, y, z, w, u, r, t);
-                auto p = std::make_shared<Trapez>(x, y, z, w, u, r, t);
-                Shapes::addShape(p);
-            }
-        }
-        catch (const noOption &e){
-            std::cout<<e.what()<<std::endl;
-        }
-    }
-
-    void deleteShape(){
-        try{
-            showIndexQuestion();
-            Shapes::deleteShape(index);
-        }
-        catch (const noObject &e){
-            std::cout<<e.what()<<std::endl;
-        }
-
-    }
-    void showShape(){
-        try {
-            showAvailableShapes();
-            if (index == 1) {
-                Shapes::showShapes(typeid(Patrat).name());
-            }
-            if (index == 2) {
-                Shapes::showShapes(typeid(Dreptunghi).name());
-            }
-            if (index == 3) {
-                Shapes::showShapes(typeid(Romb).name());
-            }
-            if (index == 4) {
-                Shapes::showShapes(typeid(Paralelogram).name());
-            }
-            if (index == 5) {
-                Shapes::showShapes(typeid(Trapez).name());
-            }
-            std::cout << "-----------------------------------------------\n";
-        }
-        catch (const noOption &e){
-            std::cout<<e.what()<<std::endl;
-        }
-    }
-
-    void showArea(){
-        try{
-            showIndexQuestion();
-            std::cout<<"Aria este: "<<Shapes::showArea(index)<<"\n"
-                     <<"--------------------------------------------------"<<"\n";
-        }
-        catch (const noObject &e){
-            std::cout<<e.what()<<std::endl;
-        }
-    }
-
-    void runMenu(){
-        while(option!=0){
-            try{
-                showMenu();
-            }
-            catch (const noOption &e){
-                std::cout<<e.what()<<std::endl;
-                option = 0 ;
-            }
-            if(option == 1){
-                addShape();
-            }
-            if(option == 2){
-                deleteShape();
-            }
-            if(option == 3){
-                Shapes::showAllShapes();
-                std::cout<<"-----------------------------------------------\n";
-            }
-            if(option == 4){
-                showShape();
-            }
-            if(option == 5){
-                showArea();
-            }
-
-        }
-    }
-
 };
 
-int main() {
 
-    try {
-        Menu meniu;
-        meniu.Menu::runMenu();
-    }
-    catch (const noInput &e){
-        std::cout<<e.what()<<std::endl;
-    }
+int main()
+{
+    //Produs prd(5, 10);
+    //Meniu::add_produs(make_shared<Produs>(prd));
     return 0;
 }
